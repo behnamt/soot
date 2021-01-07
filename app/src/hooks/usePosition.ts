@@ -36,7 +36,7 @@ export const usePosition = (settings = defaultSettings): { position: IPosition; 
     }
     navigator.geolocation.getCurrentPosition(onChange, onError, settings);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [settings.enableHighAccuracy, settings.timeout, settings.maximumAge]);
+  }, [settings]);
 
   return { position, error };
 };

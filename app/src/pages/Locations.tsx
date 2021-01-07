@@ -4,6 +4,8 @@ import { IIncidentEvent } from '../@types/ISoot.types';
 import { usePosition } from '../hooks/usePosition';
 import { IPosition } from '../@types/Event.types';
 import { BingMap, IMark } from '../components/BingMap';
+import { Paper, Typography } from '@material-ui/core';
+import { Alert, AlertTitle } from '@material-ui/lab';
 
 export const Locations: React.FC = () => {
   const [incidents, setIncidents] = useState<IIncidentEvent[] | undefined>([]);
@@ -11,7 +13,7 @@ export const Locations: React.FC = () => {
   const [endPosition, setEndPosition] = useState<IPosition | null>(null);
 
   const { sootRegistryFacade } = useSoot();
-  const { position } = usePosition();
+  const { position, error } = usePosition();
 
   useEffect((): void => {
     (async (): Promise<void> => {
@@ -45,15 +47,23 @@ export const Locations: React.FC = () => {
   }, [position]);
 
   return (
-    <div>
-      <BingMap
-        mapOptions={{
-          center: [position?.latitude, position?.longitude],
-        }}
-        marks={incidents?.map(
-          (item): IMark => ({ id: item.id, name: item.name, location: { lat: item.lat, lng: item.lon } }),
-        )}
-      />
-    </div>
+    <>
+      {!error &&
+        <Alert severity="warning">
+          <AlertTitle>Warning</AlertTitle>
+          Please enable location sharing to see incidents around you
+      </Alert>
+      }
+      {!!error &&
+        <BingMap
+          mapOptions={{
+            center: [position?.latitude, position?.longitude],
+          }}
+          marks={incidents?.map(
+            (item): IMark => ({ id: item.id, name: item.name, location: { lat: item.lat, lng: item.lon } }),
+          )}
+        />
+      }
+    </>
   );
 };

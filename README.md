@@ -25,3 +25,7 @@
 - `yarn start`
 
 Look through the frontend [README](app/README.md)
+
+#### TODO
+1. move all fetch apis to constants
+1. use react-async to call api and remove async useEffects :(
