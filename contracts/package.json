@@ -1,0 +1,33 @@
+{
+  "name": "@soot/contracts",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "scripts": {
+    "test": "jest ./tests",
+    "test:watch": "jest --watch ./tests",
+    "lint": "solium -d contracts/",
+    "lint:fix": "solium -d contracts/ --fix --config ./.soliumrc.json"
+  },
+  "dependencies": {
+    "@openzeppelin/cli": "^2.8.2",
+    "@openzeppelin/contracts": "^3.0.1",
+    "@openzeppelin/contracts-ethereum-package": "^3.0.0",
+    "@openzeppelin/upgrades": "^2.8.0",
+    "@truffle/hdwallet-provider": "^1.0.35",
+    "dotenv": "^8.2.0",
+    "dotenv-expand": "^5.1.0",
+    "oz-console": "^2.0.1",
+    "typescript": "^3.9.7"
+  },
+  "devDependencies": {
+    "@openzeppelin/test-environment": "^0.1.4",
+    "@openzeppelin/test-helpers": "^0.5.6",
+    "@types/jest": "^26.0.8",
+    "ethlint": "^1.2.5",
+    "jest": "^26.2.2",
+    "ts-jest": "^26.1.4"
+  }
+}

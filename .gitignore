@@ -1,0 +1,7 @@
+.idea/
+.ganache_data/
+.DS_Store
+
+
+# ipfs 
+.ipfs_data
