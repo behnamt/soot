@@ -65,12 +65,9 @@ setup: ##@setup Create dev environment
 	git config core.hooksPath .githooks
 	$(MAKE) env
 	$(MAKE) npm-prepare
-	$(MAKE) link
 	$(MAKE) npm-install
 	$(MAKE) start
 	$(MAKE) contracts-deploy
-	$(MAKE) build
-	$(MAKE) create-wallet
 	$(MAKE) ipfs-cors
 .PHONY: setup
 
@@ -94,10 +91,6 @@ npm-prepare: ##@setup look for yarn and nvm
 npm-install: ##@setup installs node-dependencies
 	./tools/npm-install.sh
 .PHONY: npm-install
-
-create-wallet: ##@setup creates wallet from first ganache account with password 'test'
-	./tools/create-wallet.sh
-.PHONY: create-wallet
 
 npm-cleanup: ##@cleanup remove all node_modules
 	rm -rf ./contracts/node_modules
@@ -125,7 +118,6 @@ clean: ##@setup removes servers
 	$(MAKE) stop
 	$(DOCKER_COMPOSE) down --remove-orphans
 	$(MAKE) npm-cleanup
-	$(MAKE) unlink
 .PHONY: clean
 
 rebuild: clean ##@development removes images
