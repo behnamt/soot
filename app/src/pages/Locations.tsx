@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSoot } from '../context/Soot';
 import { IIncidentEvent } from '../@types/ISoot.types';
-import { usePosition } from '../hooks/Position';
+import { usePosition } from '../hooks/usePosition';
 import { IPosition } from '../@types/Event.types';
 import { BingMap, IMark } from '../components/BingMap';
 
