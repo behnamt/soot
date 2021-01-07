@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { Alert, AlertTitle } from '@material-ui/lab';
 import { useSoot } from '../context/Soot';
 import { IIncidentEvent } from '../@types/ISoot.types';
 import { usePosition } from '../hooks/usePosition';
 import { IPosition } from '../@types/Event.types';
 import { BingMap, IMark } from '../components/BingMap';
-import { Paper, Typography } from '@material-ui/core';
-import { Alert, AlertTitle } from '@material-ui/lab';
 
 export const Locations: React.FC = () => {
   const [incidents, setIncidents] = useState<IIncidentEvent[] | undefined>([]);

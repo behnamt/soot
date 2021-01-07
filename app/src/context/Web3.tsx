@@ -64,14 +64,6 @@ const useWeb3Provider = (): IWeb3Context => {
       } else {
         await handleAccountsChanged([_account]);
       }
-      // ethereum.send('eth_requestAccounts');
-      // web3Instance.eth.personal.getAccounts();
-      // web3.eth.requestAccounts([callback])
-      // https://web3js.readthedocs.io/en/v1.2.6/web3-eth.html#requestaccounts
-      // const accounts = await web3Instance.eth.personal.getAccounts();
-      // Todo: Shouldn't we use web3Instance.eth.givenProvider.selectedAddress?
-      // const tempAccount = accounts[0];
-      // setAccount(tempAccount);
     } catch (err) {
       if (err.code === 4001) {
         // EIP 1193 userRejectedRequest error
