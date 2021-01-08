@@ -6,16 +6,38 @@ import { useWeb3 } from '../context/Web3';
 import { useEvents } from '../context/Event';
 import { BingMap } from '../components/Map/BingMap';
 
-export const Report: React.FC = () => {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [isEncrypted, setIsEncrypted] = useState(false);
-  const [isCurrentLocation, setIsCurrentLocation] = useState(true);
-  const { position } = usePosition();
+const harassmentTypes = [
+  {
+    label: 'Dating violence',
+    value: 'dv',
+  },
+  {
+    label: 'Stalking',
+    value: 's',
+  },
+  {
+    label: 'Offensive behavior',
+    value: 'ob',
+  },
+  {
+    label: 'Sexual harassment',
+    value: 'sh',
+  },
+]
 
+export const Report: React.FC = () => {
   const { sootRegistryFacade } = useSoot();
   const { account, getPublicKey } = useWeb3();
   const { addReportEvent } = useEvents();
+
+  const { position } = usePosition();
+
+  const [name, setName] = useState<string>('');
+  const [type, setType] = useState<string>('');
+  const [description, setDescription] = useState<string>('');
+  const [isEncrypted, setIsEncrypted] = useState<boolean>(false);
+  const [isCurrentLocation, setIsCurrentLocation] = useState<boolean>(true);
+
 
   const submit = async (): Promise<void> => {
     if (position) {
@@ -67,13 +89,12 @@ export const Report: React.FC = () => {
             <Select
               labelId="type"
               label="Type of misconduct"
+              value={type}
+              onChange={(event): void => setType(event.target.value.toString())}
             >
-              <MenuItem value="">
-                <em>Dating violence</em>
-              </MenuItem>
-              <MenuItem value={20}>Stalking</MenuItem>
-              <MenuItem value={30}>Offensive behavior</MenuItem>
-              <MenuItem value={10}>Sexual harassment</MenuItem>
+              {harassmentTypes.map((item) =>
+                <MenuItem key={item.value} value={item.value}>{item.label}</MenuItem>
+              )}
             </Select>
           </FormControl>
         </Box>
@@ -113,13 +134,12 @@ export const Report: React.FC = () => {
               marks={[{
                 id: '0',
                 location: { lat: position?.latitude, lng: position?.longitude },
-                name: 'new',
+                name: 'Drag Me!',
                 draggable: true,
               }]} />
           </Box> :
           null
         }
-
         <Box mb={2} display="flex" width={1}>
           <Button variant="contained" color="primary" title="Report" onClick={submit}>
             Save the report
