@@ -1,4 +1,5 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
+import { useAsync } from 'react-async';
 import { loadBingApi, Microsoft } from '../../lib/services/BingApi';
 
 export interface IMark {
@@ -37,12 +38,10 @@ export const BingMap: React.FC<IMapProps> = (props: IMapProps) => {
     return map;
   };
 
-  useEffect(() => {
-    (async (): Promise<void> => {
-      await loadBingApi();
-      setMap(initMap());
-    })();
-  }, []);
+  useAsync({
+    promiseFn: useCallback(async () => loadBingApi(), []),
+    onResolve: () => setMap(initMap()),
+  });
 
   useEffect(() => {
     if (map && marks?.length) {
