@@ -72,8 +72,8 @@ const useWeb3Provider = (): IWeb3Context => {
     try {
       if (typeof window.ethereum !== 'undefined') {
         try {
-          const accounts = await window.ethereum.enable();
-          handleAccountsChanged(accounts);
+          const account = await window.ethereum.selectedAddress;
+          handleAccountsChanged([account]);
         } catch (error) {
           console.log(error);
         }
