@@ -19,7 +19,7 @@ ReactDOM.render(
           <SootProvider>
             <IpfsProvider>
               <EventsProvider>
-                <ContextAwareApp>                
+                <ContextAwareApp>
                   <App />
                 </ContextAwareApp>
               </EventsProvider>
