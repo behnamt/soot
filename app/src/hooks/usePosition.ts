@@ -1,17 +1,11 @@
 import { useState, useEffect } from 'react';
+import { IPosition, GeolocationCoordinates, GeolocationPositionError } from '../@types/IPosition';
 
 const defaultSettings = {
   enableHighAccuracy: false,
   timeout: Infinity,
   maximumAge: 0,
 };
-
-interface IPosition {
-  latitude: number;
-  longitude: number;
-  accuracy: number;
-  timestamp: number;
-}
 
 export const usePosition = (settings = defaultSettings): { position: IPosition; error: string } => {
   const [position, setPosition] = useState<IPosition>();
