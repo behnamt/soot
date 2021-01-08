@@ -13,11 +13,9 @@ export const UnlockWallet: React.FC<IUnlockWalletProps> = (props: IUnlockWalletP
   const { connect, web3Instance } = useWeb3();
 
   const submit = async () => {
-    if (web3Instance) {
-      const walletService = new KeyValueWalletService(web3Instance, storage);
-      const account = await walletService.loadAccount(password, 0);
-      connect(account);
-    }
+    const walletService = new KeyValueWalletService(web3Instance, storage);
+    const account = await walletService.loadAccount(password, 0);
+    connect(account);
   };
 
   return (

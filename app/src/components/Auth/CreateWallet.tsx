@@ -22,11 +22,6 @@ export const CreateWallet: React.FC = () => {
     if (isSubmittable) {
       setIsLoading(true);
       try {
-        if (!web3Instance) {
-          throw new Error('No web3');
-        }
-
-
         const wallet = new KeyValueWalletService(web3Instance, storage);
         let account;
         if (isCreatingWallet) {

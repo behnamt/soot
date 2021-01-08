@@ -2,14 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
-
 import { Web3Provider } from './context/Web3';
 import { SootProvider } from './context/Soot';
-import { Root } from './components/Root';
+import { App } from './components/App';
 import { IpfsProvider } from './context/IPFS';
 import { EventsProvider } from './context/Event';
 import { ToastProvider } from './context/ToastContext';
 import Container from '@material-ui/core/Container';
+import { ContextAwareApp } from './components/ContextAwarApp';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -19,7 +19,9 @@ ReactDOM.render(
           <SootProvider>
             <IpfsProvider>
               <EventsProvider>
-                <Root />
+                <ContextAwareApp>                
+                  <App />
+                </ContextAwareApp>
               </EventsProvider>
             </IpfsProvider>
           </SootProvider>

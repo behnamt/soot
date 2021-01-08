@@ -5,7 +5,7 @@ export interface IWeb3Context {
   isMetaMask: boolean;
   web3Instance: Web3 | null;
   account: Account | null;
-  connect: Function;
-  disconnect: Function;
+  connect: (account?: Account | string) => void;
+  disconnect: () => void;
   getPublicKey: () => Promise<string>;
 }

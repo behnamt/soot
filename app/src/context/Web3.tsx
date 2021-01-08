@@ -1,9 +1,9 @@
 import React, { useState, useContext, useEffect } from 'react';
 import Web3 from 'web3';
+import EthCrypto from 'eth-crypto';
 import { Account, HttpProvider } from 'web3-core';
 import WrappedAccount from '../lib/classes/WrappedAccount';
 import { IWeb3Context } from '../@types/IWeb3Context';
-import EthCrypto from 'eth-crypto';
 
 declare let ethereum: any;
 
@@ -27,10 +27,9 @@ const useWeb3Provider = (): IWeb3Context => {
     if (accounts.length === 0) {
       setAccount(null);
     } else {
-      // eslint-disable-next-line no-underscore-dangle
-      const _account = typeof accounts[0] === 'string' ? new WrappedAccount(accounts[0] as string) : accounts[0];
-      setAccount(_account);
-      console.debug('account changed: %s', _account.address);
+      const firstAccount = typeof accounts[0] === 'string' ? new WrappedAccount(accounts[0] as string) : accounts[0];
+      setAccount(firstAccount);
+      console.debug('account changed: %s', firstAccount.address);
     }
   };
 
@@ -41,64 +40,53 @@ const useWeb3Provider = (): IWeb3Context => {
       setWeb3Instance(web3);
       window.ethereum.on('accountsChanged', handleAccountsChanged);
     } else {
-
-    const web3: Web3 = new Web3(new Web3.providers.WebsocketProvider(process.env.REACT_APP_ETHEREUM_NODE!));
-
-    setWeb3Instance(web3);
+      const web3: Web3 = new Web3(new Web3.providers.WebsocketProvider(process.env.REACT_APP_ETHEREUM_NODE!));
+      setWeb3Instance(web3);
     }
   }, []); // eslint-disable-line
 
-  const connect = async (_account: Account | string): Promise<void> => {
-    try {
-      if (typeof window.ethereum !== 'undefined') {
-        console.log('1');
-        
-        try {
-          const accounts = await window.ethereum.enable();
-          console.log({ accounts });
-          
-          handleAccountsChanged(accounts);
-        } catch (error) {
-          console.log(error);
-        } 
-      } else {
-        await handleAccountsChanged([_account]);
-      }
-    } catch (err) {
-      if (err.code === 4001) {
-        // EIP 1193 userRejectedRequest error
-        throw new Error('Please connect to MetaMask.');
-      } else {
-        throw new Error(err);
-      }
-    }
-  };
-
   const getPublicKey = async (): Promise<string> => {
     return new Promise((resolve, reject) => {
-      // eslint-disable-next-line no-undef
       if (typeof (window) !== 'undefined' && window.ethereum) {
         const provider = web3Instance.currentProvider as HttpProvider;
-      
+
         provider.send({
           jsonrpc: '2.0',
           method: 'eth_getEncryptionPublicKey',
           params: [account],
-          // from: this.account,
         }, (err: any, result: any) => {
           if (err || !result) return reject(err);
           if (result.error) return reject(result.error);
           return resolve(result.result);
         });
       } else {
-
-      if (!account.privateKey) {
-        return reject(new Error('no private key provided'));
-      }
-
-      return resolve(EthCrypto.publicKeyByPrivateKey(account.privateKey));
+        if (!account.privateKey) {
+          return reject(new Error('no private key provided'));
+        }
+        return resolve(EthCrypto.publicKeyByPrivateKey(account.privateKey));
       }
     });
+  };
+
+  const connect = async (_account: Account | string): Promise<void> => {
+    try {
+      if (typeof window.ethereum !== 'undefined') {
+        try {
+          const accounts = await window.ethereum.enable();
+          handleAccountsChanged(accounts);
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        await handleAccountsChanged([_account]);
+      }
+    } catch (err) {
+      if (err.code === 4001) {
+        throw new Error('Please connect to MetaMask.');
+      } else {
+        throw new Error(err);
+      }
+    }
   };
 
   const disconnect = async (): Promise<any> => {

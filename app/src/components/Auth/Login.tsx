@@ -12,9 +12,6 @@ export const Login: React.FC = () => {
   const { web3Instance, isMetaMask, connect } = useWeb3();
 
   useEffect((): void => {
-    if (!web3Instance) {
-      return;
-    }
     (async (): Promise<void> => {
       try {
         const wallet = new KeyValueWalletService(web3Instance, storage);

@@ -18,12 +18,12 @@ const useSootProvider = (): ISootContext => {
   const { web3Instance, account } = useWeb3();
 
   useEffect((): void => {
-    if (web3Instance && account) {
+    if (account) {
       setSootRegistryFacade(
         new SootFacade(web3Instance, account, process.env.REACT_APP_SOOT_REGISTRY_CONTRACT_ADDRESS!),
       );
     }
-  }, [web3Instance, account]); // eslint-disable-line
+  }, [account]); // eslint-disable-line
 
   return {
     sootRegistryFacade,
