@@ -1,4 +1,5 @@
-import React, { useState, useEffect, PropsWithChildren, useContext } from 'react';
+import React, { useState, PropsWithChildren, useContext } from 'react';
+import { useAsync } from 'react-async';
 import { IpfsContextInterface } from '../@types/IpfsContextInterface';
 import { startNode } from '../lib/services/IpfsService';
 
@@ -11,12 +12,13 @@ const useIpfs = () => useContext(ipfsContext);
 const useIpfsProvider = () => {
   const [ipfs, setIpfs] = useState<any>(null);
 
-  useEffect(() => {
-    (async () => {
-      const ipfsNode = await startNode();
-      setIpfs(ipfsNode);
-    })();
-  }, []);
+  useAsync(
+    {
+      promiseFn: startNode,
+      onReject: (error: Error) => console.error(error),
+      onResolve: (ipfsNode) => setIpfs(ipfsNode),
+    },
+  );
 
   return { ipfs };
 };
