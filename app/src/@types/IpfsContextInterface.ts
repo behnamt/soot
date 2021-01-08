@@ -1,5 +1,6 @@
-import { CID } from 'ipfs';
+import IPFS from 'ipfs';
 
 export interface IpfsContextInterface {
-  ipfs: any;
+  ipfs: IPFS;
+  isPending: boolean;
 }

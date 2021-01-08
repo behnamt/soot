@@ -1,26 +1,25 @@
-import React, { useState, PropsWithChildren, useContext } from 'react';
-import { useAsync } from 'react-async';
+import React, { PropsWithChildren, useContext } from 'react';
+import { useAsync, AsyncState } from 'react-async';
+import IPFS from 'ipfs';
 import { IpfsContextInterface } from '../@types/IpfsContextInterface';
 import { startNode } from '../lib/services/IpfsService';
 
 const ipfsContext = React.createContext<IpfsContextInterface>({
   ipfs: null,
+  isPending: false,
 });
 
 const useIpfs = () => useContext(ipfsContext);
 
 const useIpfsProvider = () => {
-  const [ipfs, setIpfs] = useState<any>(null);
-
-  useAsync(
+  const { data: ipfs, isPending }:AsyncState<IPFS> = useAsync(
     {
       promiseFn: startNode,
       onReject: (error: Error) => console.error(error),
-      onResolve: (ipfsNode) => setIpfs(ipfsNode),
     },
   );
 
-  return { ipfs };
+  return { ipfs, isPending };
 };
 
 const IpfsProvider = ({ children }: PropsWithChildren<any>) => {
