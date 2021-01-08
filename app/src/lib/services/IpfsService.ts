@@ -18,7 +18,10 @@ async function startNode(): Promise<IPFS> {
     config: {
       Addresses: {
         Swarm: [
-          '/ip4/127.0.0.1/tcp/9090/wss/p2p-webrtc-star'
+          '/ip4/127.0.0.1/tcp/9090/wss/p2p-webrtc-star',
+          // These are public webrtc-star servers
+          '/dns4/wrtc-star1.par.dwebops.pub/tcp/443/wss/p2p-webrtc-star',
+          '/dns4/wrtc-star2.sjc.dwebops.pub/tcp/443/wss/p2p-webrtc-star',
         ]
       }
     }
@@ -146,7 +149,7 @@ function publish(name: string, message: string, from: string): void {
 function subscribe(name: string, address: string, callback: Function): void {
   if (ipfsNode) {
     console.log('SUBSCRIBING TO');
-    
+
     ipfsNode.pubsub.subscribe(`${process.env.REACT_APP_SOOT_REGISTRY_CONTRACT_ADDRESS}-${name}`, (msg, a) => {
       try {
         const content = JSON.parse(msg.data.toString('utf-8'));
