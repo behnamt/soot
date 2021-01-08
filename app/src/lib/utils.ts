@@ -1,4 +1,4 @@
-export const formatDate = (date): string => {
+export const formatDate = (date: number): string => {
   const d = new Date(0);
   d.setUTCMilliseconds(date);
   let month = '' + (d.getMonth() + 1);

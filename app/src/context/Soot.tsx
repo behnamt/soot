@@ -20,7 +20,7 @@ const useSootProvider = (): ISootContext => {
   useEffect((): void => {
     if (account) {
       setSootRegistryFacade(
-        new SootFacade(web3Instance, account, process.env.REACT_APP_SOOT_REGISTRY_CONTRACT_ADDRESS!),
+        new SootFacade(web3Instance, account, process.env.REACT_APP_SOOT_REGISTRY_CONTRACT_ADDRESS),
       );
     }
   }, [account]); // eslint-disable-line
@@ -30,7 +30,7 @@ const useSootProvider = (): ISootContext => {
   };
 };
 
-const SootProvider = ({ children }: any) => {
+const SootProvider = ({ children }: { children: React.ReactNode }): React.ReactElement => {
   const sootRegistryFacade = useSootProvider();
 
   return <sootContext.Provider value={sootRegistryFacade}>{children}</sootContext.Provider>;

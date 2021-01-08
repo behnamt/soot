@@ -6,27 +6,27 @@ export const MenuBar: React.FC = () => {
   const location = useLocation();
   const [menuName, setMenuName] = useState('');
 
-useEffect(() => {
-  let name = location.pathname;
-  switch (location.pathname) {
-    case '/':
-      name = 'Report a misconduct'
-      break;
-    case '/locations':
-      name = 'Map'
-      break;
-    case '/messenger':
-      name = 'Messenger'
-      break;
-    case '/incidents':
-      name = 'My reports'
-      break;
-  
-    default:
-      break;
-  }
-  setMenuName(name);
-}, [location.pathname]);
+  useEffect(() => {
+    let name = location.pathname;
+    switch (location.pathname) {
+      case '/':
+        name = 'Report a misconduct';
+        break;
+      case '/locations':
+        name = 'Map';
+        break;
+      case '/messenger':
+        name = 'Messenger';
+        break;
+      case '/incidents':
+        name = 'My reports';
+        break;
+
+      default:
+        break;
+    }
+    setMenuName(name);
+  }, [location.pathname]);
 
   return (
     <AppBar position="static">

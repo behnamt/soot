@@ -18,7 +18,7 @@ export const CreateWallet: React.FC = () => {
 
   const { web3Instance, connect } = useWeb3();
 
-  const submit = async () => {
+  const submit = async (): Promise<void> => {
     if (isSubmittable) {
       setIsLoading(true);
       try {
@@ -42,12 +42,12 @@ export const CreateWallet: React.FC = () => {
     }
   };
 
-  const toggle = () => {
+  const toggle = (): void => {
     setIsCreatingWallet(!isCreatingWallet);
     setIsSubmittable(false);
-  }
+  };
 
-  const createWalletFormSubmittableChanged = (password: string) => {
+  const createWalletFormSubmittableChanged = (password: string): void => {
     if (!password) {
       setIsSubmittable(false);
       setPassword('');
@@ -55,9 +55,9 @@ export const CreateWallet: React.FC = () => {
       setIsSubmittable(true);
       setPassword(password);
     }
-  }
+  };
 
-  const importWalletFormSubmittableChanged = (password: string, privateKey: string) => {
+  const importWalletFormSubmittableChanged = (password: string, privateKey: string): void => {
     if (!password) {
       setIsSubmittable(false);
       setPassword('');
@@ -67,24 +67,21 @@ export const CreateWallet: React.FC = () => {
       setPassword(password);
       setPrivateKey(privateKey);
     }
-  }
+  };
 
   return (
     <form onSubmit={submit}>
       <Box p={3} display="flex" justifyContent="center" flexDirection="column">
-        {isCreatingWallet ?
-          <CreateWalletForm onSubmittableChanged={createWalletFormSubmittableChanged} /> :
+        {isCreatingWallet ? (
+          <CreateWalletForm onSubmittableChanged={createWalletFormSubmittableChanged} />
+        ) : (
           <ImportWalletForm onSubmittableChanged={importWalletFormSubmittableChanged} />
-        }
-        <Typography variant="caption" align="center">{errorMessage}</Typography>
+        )}
+        <Typography variant="caption" align="center">
+          {errorMessage}
+        </Typography>
         <Box mb={2} display="flex" justifyContent="center" width={1}>
-          <Button
-            variant="contained"
-            color="primary"
-            disabled={!password || isLoading}
-            title="Login"
-            onClick={submit}
-          >
+          <Button variant="contained" color="primary" disabled={!password || isLoading} title="Login" onClick={submit}>
             {isCreatingWallet ? 'Create Wallet' : 'Import Wallet'}
           </Button>
         </Box>

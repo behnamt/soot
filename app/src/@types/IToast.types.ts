@@ -1,19 +1,19 @@
 export interface IToast {
   id: string;
-  content: any;
+  content: string;
   autoHide: boolean;
   type?: EToastTypes;
 }
 
 export interface IToastProps {
-  remove: any;
-  content: any;
+  remove: () => void;
+  content: string;
   autoHide: boolean;
   type?: EToastTypes;
 }
 
 export interface IToastContext {
-  add: (content: any) => void;
+  add: (content: string) => void;
   remove: (id: string) => void;
   toasts: IToast[];
 }

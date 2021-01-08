@@ -1,4 +1,5 @@
 import storage from './AppStorage.service';
+import LocalStorage from './LocalStorage';
 
 interface IReportStorage {
   count: number;
@@ -6,7 +7,7 @@ interface IReportStorage {
 }
 
 class ReportStorage {
-  public storage: any;
+  public storage: LocalStorage;
 
   private readonly allMyReportsKey = 'myReports';
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, PropsWithChildren, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import reportStorage from '../lib/services/storage/ReportStorage';
 import { useSoot } from './Soot';
 import { useWeb3 } from './Web3';
@@ -10,7 +10,7 @@ interface EventsContextInterface {
   proposedNotifications: {
     [name: string]: string[];
   };
-  addReportEvent: Function;
+  addReportEvent: (name: string) => void;
 }
 const eventsContext = React.createContext<EventsContextInterface>({
   events: null,
@@ -18,7 +18,7 @@ const eventsContext = React.createContext<EventsContextInterface>({
   addReportEvent: () => null,
 });
 
-const useEvents = () => useContext(eventsContext);
+const useEvents = (): EventsContextInterface => useContext(eventsContext);
 
 const useEventsprovider = (): EventsContextInterface => {
   const [events, setEvents] = useState<string[]>([]);
@@ -29,13 +29,13 @@ const useEventsprovider = (): EventsContextInterface => {
   const { account } = useWeb3();
   const { add } = useToast();
 
-  const fetchMyReports = async () => {
+  const fetchMyReports = async (): Promise<void> => {
     const myReports = await sootRegistryFacade.getAllIncidentsForVictim(account.address);
     const reportedNames = myReports.map((item) => item.name);
     setEvents(reportedNames);
   };
 
-  const addReportEvent = (name: string) => {
+  const addReportEvent = (name: string): void => {
     setEvents([...events, name]);
   };
 
@@ -48,25 +48,23 @@ const useEventsprovider = (): EventsContextInterface => {
   useEffect((): void => {
     (async (): Promise<void> => {
       if (sootRegistryFacade && events.length) {
-        let newProposedNotifications = {...proposedNotifications};
+        const newProposedNotifications = { ...proposedNotifications };
         const allRepeatedEvents = await sootRegistryFacade.getAllRepeatedEvents();
-        allRepeatedEvents.forEach((event: IRepeatedEvent)=>{
+        allRepeatedEvents.forEach((event: IRepeatedEvent) => {
           const temp = newProposedNotifications[event.name] || [];
-          if (!temp.some((item) => item === event.author)){
+          if (!temp.some((item) => item === event.author)) {
             add(`There is another incident regarding ${event.name}`);
             temp.push(event.author);
             newProposedNotifications[event.name] = temp;
           }
-
         });
         setProposedNotifications(newProposedNotifications);
       }
     })();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [events, sootRegistryFacade]);
 
   useEffect(() => {
-    (async () => {
+    (async (): Promise<void> => {
       if (sootRegistryFacade && account) {
         if (await reportStorage.isReportStorageEmpty()) {
           await fetchMyReports();
@@ -75,13 +73,12 @@ const useEventsprovider = (): EventsContextInterface => {
         }
       }
     })();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sootRegistryFacade, account]);
 
   return { events, proposedNotifications, addReportEvent };
 };
 
-const EventsProvider = ({ children }: PropsWithChildren<any>) => {
+const EventsProvider = ({ children }: { children: React.ReactNode }): React.ReactElement => {
   const events = useEventsprovider();
 
   return <eventsContext.Provider value={events}>{children}</eventsContext.Provider>;

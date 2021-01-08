@@ -1,5 +1,15 @@
 import React, { useState } from 'react';
-import { Box, TextField, Button, Checkbox, FormControlLabel, FormControl, InputLabel, MenuItem, Select } from '@material-ui/core';
+import {
+  Box,
+  TextField,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+} from '@material-ui/core';
 import { useSoot } from '../context/Soot';
 import { usePosition } from '../hooks/usePosition';
 import { useWeb3 } from '../context/Web3';
@@ -23,7 +33,7 @@ const harassmentTypes = [
     label: 'Sexual harassment',
     value: 'sh',
   },
-]
+];
 
 export const Report: React.FC = () => {
   const { sootRegistryFacade } = useSoot();
@@ -37,7 +47,6 @@ export const Report: React.FC = () => {
   const [description, setDescription] = useState<string>('');
   const [isEncrypted, setIsEncrypted] = useState<boolean>(false);
   const [isCurrentLocation, setIsCurrentLocation] = useState<boolean>(true);
-
 
   const submit = async (): Promise<void> => {
     if (position) {
@@ -92,9 +101,11 @@ export const Report: React.FC = () => {
               value={type}
               onChange={(event): void => setType(event.target.value.toString())}
             >
-              {harassmentTypes.map((item) =>
-                <MenuItem key={item.value} value={item.value}>{item.label}</MenuItem>
-              )}
+              {harassmentTypes.map((item) => (
+                <MenuItem key={item.value} value={item.value}>
+                  {item.label}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         </Box>
@@ -124,22 +135,24 @@ export const Report: React.FC = () => {
             label="Use current location"
           />
         </Box>
-        {!isCurrentLocation ?
+        {!isCurrentLocation ? (
           <Box>
             <BingMap
-              height='30vh'
+              height="30vh"
               mapOptions={{
                 center: [position?.latitude, position?.longitude],
               }}
-              marks={[{
-                id: '0',
-                location: { lat: position?.latitude, lng: position?.longitude },
-                name: 'Drag Me!',
-                draggable: true,
-              }]} />
-          </Box> :
-          null
-        }
+              marks={[
+                {
+                  id: '0',
+                  location: { lat: position?.latitude, lng: position?.longitude },
+                  name: 'Drag Me!',
+                  draggable: true,
+                },
+              ]}
+            />
+          </Box>
+        ) : null}
         <Box mb={2} display="flex" width={1}>
           <Button variant="contained" color="primary" title="Report" onClick={submit}>
             Save the report

@@ -16,7 +16,6 @@ export const Incidents: React.FC = () => {
         setList(await sootRegistryFacade.getAllIncidentIdsForVictim(account.address));
       }
     })();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sootRegistryFacade]);
 
   return (

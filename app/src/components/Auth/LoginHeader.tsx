@@ -1,4 +1,4 @@
-import {  Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -10,10 +10,14 @@ const HeaderBox = styled.div`
 `;
 
 export const LoginHeader: React.FC = () => {
-    return (
-        <HeaderBox>
-            <Typography variant="h1" align="center">ĐSoot</Typography>
-            <Typography variant="h6" align="center">A very catchy catch phrase</Typography>
-        </HeaderBox>
-    );
+  return (
+    <HeaderBox>
+      <Typography variant="h1" align="center">
+        ĐSoot
+      </Typography>
+      <Typography variant="h6" align="center">
+        A very catchy catch phrase
+      </Typography>
+    </HeaderBox>
+  );
 };

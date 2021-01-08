@@ -21,36 +21,28 @@ export const BottomBar: React.FC = () => {
         <IconButton>
           <FlagOutlined />
         </IconButton>
-        <Typography variant="caption">
-          Report
-        </Typography>
+        <Typography variant="caption">Report</Typography>
       </Link>
       <Link to="/locations" style={{ display: 'flex', flexDirection: 'column', textDecoration: 'none' }}>
         <IconButton>
           <Map />
         </IconButton>
-        <Typography variant="caption">
-          Incidents near me
-        </Typography>
+        <Typography variant="caption">Incidents near me</Typography>
       </Link>
       <Link to="/incidents" style={{ display: 'flex', flexDirection: 'column', textDecoration: 'none' }}>
         <IconButton>
           <List />
         </IconButton>
-        <Typography variant="caption">
-          My reports
-        </Typography>
+        <Typography variant="caption">My reports</Typography>
       </Link>
-      { hasNotificationProposals ?
+      {hasNotificationProposals ? (
         <Link to="/messenger" style={{ display: 'flex', flexDirection: 'column', textDecoration: 'none' }}>
           <IconButton>
             <MessageTwoTone />
           </IconButton>
-          <Typography variant="caption">
-            Messenger
-        </Typography>
-        </Link> :
-        null}
+          <Typography variant="caption">Messenger</Typography>
+        </Link>
+      ) : null}
     </Box>
   );
 };

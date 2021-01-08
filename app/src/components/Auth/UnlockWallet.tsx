@@ -4,15 +4,11 @@ import KeyValueWalletService from '../../lib/services/KeyValueWalletService';
 import storage from '../../lib/services/storage/AppStorage.service';
 import { Box, TextField, Button } from '@material-ui/core';
 
-interface IUnlockWalletProps {
-  wallet: any;
-}
-
-export const UnlockWallet: React.FC<IUnlockWalletProps> = (props: IUnlockWalletProps) => {
+export const UnlockWallet: React.FC = () => {
   const [password, setPassword] = useState('');
   const { connect, web3Instance } = useWeb3();
 
-  const submit = async () => {
+  const submit = async (): Promise<void> => {
     const walletService = new KeyValueWalletService(web3Instance, storage);
     const account = await walletService.loadAccount(password, 0);
     connect(account);
@@ -25,7 +21,7 @@ export const UnlockWallet: React.FC<IUnlockWalletProps> = (props: IUnlockWalletP
           <TextField
             type="password"
             variant="outlined"
-            onChange={(event) => setPassword(event.target.value)}
+            onChange={(event): void => setPassword(event.target.value)}
             value={password}
           />
         </Box>

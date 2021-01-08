@@ -15,16 +15,19 @@ export const IncidentListItem: React.FC<{ id: number }> = (props: { id: number }
 
   useEffect(() => {
     if (sootRegistryFacade) {
-      (async () => {
+      (async (): Promise<void> => {
         setIncident(await sootRegistryFacade.getIncident(id));
       })();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sootRegistryFacade]);
 
   return incident ? (
     <ListItem>
-      <ListItemText primary={incident.name} secondary={incident.date} onClick={() => history.push(`incidents/${id}`)} />
+      <ListItemText
+        primary={incident.name}
+        secondary={incident.date}
+        onClick={(): void => history.push(`incidents/${id}`)}
+      />
     </ListItem>
   ) : (
     <React.Fragment>

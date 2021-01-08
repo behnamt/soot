@@ -17,7 +17,7 @@ export const usePosition = (settings = defaultSettings): { position: IPosition; 
   const [position, setPosition] = useState<IPosition>();
   const [error, setError] = useState('');
 
-  const onChange = ({ coords, timestamp }: { coords: any; timestamp: number }): void => {
+  const onChange = ({ coords, timestamp }: { coords: GeolocationCoordinates; timestamp: number }): void => {
     setPosition({
       latitude: coords.latitude,
       longitude: coords.longitude,
@@ -26,7 +26,7 @@ export const usePosition = (settings = defaultSettings): { position: IPosition; 
     });
   };
 
-  const onError = (error: PositionError): void => {
+  const onError = (error: GeolocationPositionError): void => {
     setError(error.message);
   };
 
@@ -35,7 +35,6 @@ export const usePosition = (settings = defaultSettings): { position: IPosition; 
       setError('Geolocation is not supported');
     }
     navigator.geolocation.getCurrentPosition(onChange, onError, settings);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [settings]);
 
   return { position, error };

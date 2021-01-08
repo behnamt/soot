@@ -6,7 +6,5 @@ import { Navigation } from './Layout/Navigation';
 export const App: React.FC = () => {
   const { account } = useWeb3();
 
-  return (
-      account ? <Navigation /> : <Login />
-  );
+  return account ? <Navigation /> : <Login />;
 };

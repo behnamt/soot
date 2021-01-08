@@ -23,22 +23,25 @@ export const Login: React.FC = () => {
     })();
   }, [web3Instance]);
 
+  const connectToWallet = (): void => {
+    connect();
+  };
+
   return (
     <Box display="flex" flexDirection="column">
       <LoginHeader />
-      { isMetaMask ?
+      {isMetaMask ? (
         <Box p={3} display="flex" justifyContent="center" flexDirection="column">
           <Typography variant="subtitle1">Seems like you have a built in wallet</Typography>
-          <Button variant="contained" color="primary" title="Import" onClick={async () => connect()}>
+          <Button variant="contained" color="primary" title="Import" onClick={connectToWallet}>
             Connect with Wallet
-        </Button>
-        </Box> :
-        (
-          localWallet ?
-            <UnlockWallet wallet={localWallet} /> :
-            <CreateWallet />
-        )
-      }
+          </Button>
+        </Box>
+      ) : localWallet ? (
+        <UnlockWallet />
+      ) : (
+        <CreateWallet />
+      )}
     </Box>
   );
 };

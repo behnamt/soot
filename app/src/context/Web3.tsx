@@ -5,6 +5,7 @@ import { Account, HttpProvider } from 'web3-core';
 import WrappedAccount from '../lib/classes/WrappedAccount';
 import { IWeb3Context } from '../@types/IWeb3Context';
 
+//eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare let ethereum: any;
 
 const web3Context = React.createContext<IWeb3Context>({
@@ -40,29 +41,39 @@ const useWeb3Provider = (): IWeb3Context => {
       setWeb3Instance(web3);
       window.ethereum.on('accountsChanged', handleAccountsChanged);
     } else {
-      const web3: Web3 = new Web3(new Web3.providers.WebsocketProvider(process.env.REACT_APP_ETHEREUM_NODE!));
+      const web3: Web3 = new Web3(new Web3.providers.WebsocketProvider(process.env.REACT_APP_ETHEREUM_NODE));
       setWeb3Instance(web3);
     }
   }, []); // eslint-disable-line
 
   const getPublicKey = async (): Promise<string> => {
     return new Promise((resolve, reject) => {
-      if (typeof (window) !== 'undefined' && window.ethereum) {
+      if (typeof window !== 'undefined' && window.ethereum) {
         const provider = web3Instance.currentProvider as HttpProvider;
 
-        provider.send({
-          jsonrpc: '2.0',
-          method: 'eth_getEncryptionPublicKey',
-          params: [account],
-        }, (err: any, result: any) => {
-          if (err || !result) return reject(err);
-          if (result.error) return reject(result.error);
-          return resolve(result.result);
-        });
+        provider.send(
+          {
+            jsonrpc: '2.0',
+            method: 'eth_getEncryptionPublicKey',
+            params: [account],
+          },
+          // eslint-disable-next-line
+          (err: Error, result: any) => {
+            if (err || !result) {
+              return reject(err);
+            }
+            if (result.error) {
+              return reject(result.error);
+            }
+
+            return resolve(result.result);
+          },
+        );
       } else {
         if (!account.privateKey) {
           return reject(new Error('no private key provided'));
         }
+
         return resolve(EthCrypto.publicKeyByPrivateKey(account.privateKey));
       }
     });
@@ -75,7 +86,7 @@ const useWeb3Provider = (): IWeb3Context => {
           const account = await window.ethereum.selectedAddress;
           handleAccountsChanged([account]);
         } catch (error) {
-          console.log(error);
+          console.debug(error);
         }
       } else {
         await handleAccountsChanged([_account]);
@@ -89,7 +100,7 @@ const useWeb3Provider = (): IWeb3Context => {
     }
   };
 
-  const disconnect = async (): Promise<any> => {
+  const disconnect = async (): Promise<void> => {
     setAccount(null);
   };
 
@@ -103,7 +114,7 @@ const useWeb3Provider = (): IWeb3Context => {
   };
 };
 
-const Web3Provider = ({ children }: any) => {
+const Web3Provider = ({ children }: { children: React.ReactNode }): React.ReactElement => {
   const web3 = useWeb3Provider();
 
   return <web3Context.Provider value={web3}>{children}</web3Context.Provider>;

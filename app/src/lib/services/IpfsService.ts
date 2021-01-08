@@ -22,9 +22,9 @@ async function startNode(): Promise<IPFS> {
           // These are public webrtc-star servers
           '/dns4/wrtc-star1.par.dwebops.pub/tcp/443/wss/p2p-webrtc-star',
           '/dns4/wrtc-star2.sjc.dwebops.pub/tcp/443/wss/p2p-webrtc-star',
-        ]
-      }
-    }
+        ],
+      },
+    },
   });
 
   return ipfsNode;
@@ -38,7 +38,7 @@ function connectNode(config: IpfsConfigInterface): void {
   ipfsNode = ipfsClient(config);
 }
 
-async function add(content: string | any[]): Promise<any[]> {
+async function add(content: string | string[]): Promise<string[]> {
   const addResult = ipfsNode.add(content);
   const results = [];
 
@@ -50,8 +50,8 @@ async function add(content: string | any[]): Promise<any[]> {
   return results;
 }
 
-async function read(fileContent: any): Promise<string> {
-  const chunks: any[] = [];
+async function read(fileContent: string): Promise<string> {
+  const chunks: string[] = [];
 
   // eslint-disable-next-line no-restricted-syntax
   for await (const chunk of fileContent) {
@@ -138,19 +138,19 @@ function publish(name: string, message: string, from: string): void {
 
     ipfsNode.pubsub.publish(`${process.env.REACT_APP_SOOT_REGISTRY_CONTRACT_ADDRESS}-${name}`, data, (err) => {
       if (err) {
-        console.error('error publishing: ', err);
+        console.debug('error publishing: ', err);
       } else {
-        console.log('successfully published message');
+        console.debug('successfully published message');
       }
     });
   }
 }
 
-function subscribe(name: string, address: string, callback: Function): void {
+function subscribe(name: string, address: string, callback: (object) => void): void {
   if (ipfsNode) {
-    console.log('SUBSCRIBING TO');
+    console.debug('SUBSCRIBING TO');
 
-    ipfsNode.pubsub.subscribe(`${process.env.REACT_APP_SOOT_REGISTRY_CONTRACT_ADDRESS}-${name}`, (msg, a) => {
+    ipfsNode.pubsub.subscribe(`${process.env.REACT_APP_SOOT_REGISTRY_CONTRACT_ADDRESS}-${name}`, (msg) => {
       try {
         const content = JSON.parse(msg.data.toString('utf-8'));
         const seqno = msg.seqno.toString('utf-8');
@@ -158,8 +158,7 @@ function subscribe(name: string, address: string, callback: Function): void {
         callback({ ...content, seqno });
         // }
       } catch {
-        console.log('ERROR');
-
+        console.debug('ERROR');
       }
     });
   }
@@ -170,9 +169,6 @@ function unsubscribe(name: string): void {
     ipfsNode.pubsub.unsubscribe(`${process.env.REACT_APP_SOOT_REGISTRY_CONTRACT_ADDRESS}-${name}`);
   }
 }
-
-
-
 
 export {
   add,

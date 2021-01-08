@@ -4,7 +4,7 @@ import WalletService from '../services/WalletService';
 
 const createWallet = (
   walletPassword: string,
-  numberOfAccounts: number = 1,
+  numberOfAccounts = 1,
   walletService: WalletService & IPersistentWallet,
 ): Account[] => {
   const accounts = walletService.createAccounts(numberOfAccounts);

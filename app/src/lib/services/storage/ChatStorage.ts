@@ -1,8 +1,9 @@
 import { IChatItem, IChatStorage } from '../../../@types/IChat.types';
 import storage from './AppStorage.service';
+import LocalStorage from './LocalStorage';
 
 class ChatStorage {
-  public storage: any;
+  public storage: LocalStorage;
 
   private readonly chatKey = 'chats';
 

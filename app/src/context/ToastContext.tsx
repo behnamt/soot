@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState, PropsWithChildren } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import { IToast, IToastContext, EToastTypes } from '../@types/IToast.types';
 import { Toast } from '../components/Toast/Toast';
 
@@ -40,7 +40,7 @@ const useToastProvider = (): IToastContext => {
   return { toasts, add, remove };
 };
 
-const ToastProvider = ({ children }: PropsWithChildren<any>) => {
+const ToastProvider = ({ children }: { children: React.ReactNode }): React.ReactElement => {
   const providerValue = useToastProvider();
 
   return (

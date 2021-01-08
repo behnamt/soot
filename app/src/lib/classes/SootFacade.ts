@@ -100,7 +100,7 @@ class SootRegistryFacade {
   }
 
   public async getAllIncidentsForVictim(address: string): Promise<IFullIncident[]> {
-    console.log(address);
+    console.debug(address);
 
     const ids = await this.contract.methods.getAllReportsOfVictim(address).call();
 
@@ -116,7 +116,7 @@ class SootRegistryFacade {
       lat: incident.lat / GEO_RESOLUTION,
       lon: incident.lon / GEO_RESOLUTION,
       name: hexToUtf8(incident.name),
-      date: formatDate(incident.date),
+      date: formatDate(Number(incident.date)),
     };
   }
 
@@ -126,11 +126,17 @@ class SootRegistryFacade {
       toBlock: 'latest',
     });
 
-    return Promise.all(allRepeatedAttaks.map((event: EventData): IRepeatedEvent =>({
-      author: event.returnValues._author,
-          name: hexToUtf8(event.returnValues._name),
-          date: formatDate(event.returnValues._date),
-    })).filter((event: IRepeatedEvent) => !this.isTheAuthor(event.author) && this.hasAHistoryEvent(event.name)));
+    return Promise.all(
+      allRepeatedAttaks
+        .map(
+          (event: EventData): IRepeatedEvent => ({
+            author: event.returnValues._author,
+            name: hexToUtf8(event.returnValues._name),
+            date: formatDate(event.returnValues._date),
+          }),
+        )
+        .filter((event: IRepeatedEvent) => !this.isTheAuthor(event.author) && this.hasAHistoryEvent(event.name)),
+    );
     // ,
     //   async (error, event: EventData) => {
     //     const formattedEvent = {

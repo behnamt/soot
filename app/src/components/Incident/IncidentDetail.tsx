@@ -9,7 +9,7 @@ import { useSoot } from '../../context/Soot';
 import { BingMap } from '../Map/BingMap';
 
 export const IncidentDetail: React.FC = () => {
-  const { incidentId } = useParams();
+  const { incidentId } = useParams<{ incidentId: string }>();
   const [incident, setIncident] = useState<IFullIncident>(null);
   const [description, setDescription] = useState('');
 
@@ -18,16 +18,15 @@ export const IncidentDetail: React.FC = () => {
 
   useEffect(() => {
     if (sootRegistryFacade) {
-      (async () => {
-        setIncident(await sootRegistryFacade.getIncident(incidentId));
+      (async (): Promise<void> => {
+        setIncident(await sootRegistryFacade.getIncident(Number(incidentId)));
       })();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sootRegistryFacade]);
 
   useEffect(() => {
     if (account && incident) {
-      (async () => {
+      (async (): Promise<void> => {
         setDescription(await loadDescription(account, incident.cid, incident.isEncrypted));
       })();
     }

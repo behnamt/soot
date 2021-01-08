@@ -1,9 +1,11 @@
 export interface MapWindow extends Window {
   GetMap: () => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Microsoft: any;
 }
 
 declare let window: MapWindow;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export let Microsoft: any;
 
 export function loadBingApi(key?: string): Promise<void> {

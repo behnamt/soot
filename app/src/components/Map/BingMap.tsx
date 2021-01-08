@@ -12,13 +12,13 @@ export interface IMark {
 }
 
 interface IMapProps {
-  mapOptions?: any;
+  mapOptions?: { center: number[] };
   marks: IMark[] | undefined;
   height?: string;
 }
 
 interface IBingMap {
-  entities: any[];
+  entities: string[];
 }
 
 export const BingMap: React.FC<IMapProps> = (props: IMapProps) => {
@@ -28,7 +28,7 @@ export const BingMap: React.FC<IMapProps> = (props: IMapProps) => {
 
   const [map, setMap] = useState<IBingMap | null>(null);
 
-  const initMap = () => {
+  const initMap = (): IBingMap => {
     const map = new Microsoft.Maps.Map(mapRef.current);
     if (mapOptions) {
       map.setOptions(mapOptions);
@@ -38,11 +38,10 @@ export const BingMap: React.FC<IMapProps> = (props: IMapProps) => {
   };
 
   useEffect(() => {
-    (async () => {
+    (async (): Promise<void> => {
       await loadBingApi();
       setMap(initMap());
     })();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -56,7 +55,7 @@ export const BingMap: React.FC<IMapProps> = (props: IMapProps) => {
         });
 
         //Add the pushpin to the map
-        map!.entities.push(pin);
+        map.entities.push(pin);
       });
     }
   }, [map, marks]);
