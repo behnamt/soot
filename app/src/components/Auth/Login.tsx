@@ -1,27 +1,33 @@
 import { Box, Button, Typography } from '@material-ui/core';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useWeb3 } from '../../context/Web3';
 import KeyValueWalletService from '../../lib/services/KeyValueWalletService';
 import storage from '../../lib/services/storage/AppStorage.service';
 import { CreateWallet } from './CreateWallet';
 import { UnlockWallet } from './UnlockWallet';
 import { LoginHeader } from './LoginHeader';
+import { useAsync } from 'react-async';
+
+const getWallet = async (web3Instance): Promise<KeyValueWalletService> => {
+  try {
+    const wallet = new KeyValueWalletService(web3Instance, storage);
+    await wallet.ensureExists();
+
+    return wallet;
+  } catch (e) {
+    throw e;
+  }
+};
 
 export const Login: React.FC = () => {
   const [localWallet, setLocalWallet] = useState<KeyValueWalletService>();
   const { web3Instance, isMetaMask, connect } = useWeb3();
 
-  useEffect((): void => {
-    (async (): Promise<void> => {
-      try {
-        const wallet = new KeyValueWalletService(web3Instance, storage);
-        await wallet.ensureExists();
-        setLocalWallet(wallet);
-      } catch (e) {
-        // no wallet...
-      }
-    })();
-  }, [web3Instance]);
+  useAsync({
+    promiseFn: useCallback(() => getWallet(web3Instance), []),
+    onResolve: setLocalWallet,
+    onReject: (error: Error) => console.debug(error),
+  });
 
   const connectToWallet = (): void => {
     connect();
