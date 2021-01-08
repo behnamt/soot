@@ -47,13 +47,13 @@ export const Locations: React.FC = () => {
 
   return (
     <>
-      {!error &&
+      {!!error &&
         <Alert severity="warning">
           <AlertTitle>Warning</AlertTitle>
           Please enable location sharing to see incidents around you
       </Alert>
       }
-      {!!error &&
+      {!error &&
         <BingMap
           mapOptions={{
             center: [position?.latitude, position?.longitude],
