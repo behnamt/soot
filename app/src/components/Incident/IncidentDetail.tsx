@@ -6,7 +6,7 @@ import { useWeb3 } from '../../context/Web3';
 import { loadDescription } from '../../lib/scripts/loadDescription';
 import { useParams } from 'react-router-dom';
 import { useSoot } from '../../context/Soot';
-import { BingMap } from '../BingMap';
+import { BingMap } from '../Map/BingMap';
 
 export const IncidentDetail: React.FC = () => {
   const { incidentId } = useParams();

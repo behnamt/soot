@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { loadBingApi, Microsoft } from '../lib/services/BingApi';
+import { loadBingApi, Microsoft } from '../../lib/services/BingApi';
 
 export interface IMark {
   draggable?: boolean;

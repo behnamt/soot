@@ -4,7 +4,7 @@ import { useSoot } from '../context/Soot';
 import { IIncidentEvent } from '../@types/ISoot.types';
 import { usePosition } from '../hooks/usePosition';
 import { IPosition } from '../@types/Event.types';
-import { BingMap, IMark } from '../components/BingMap';
+import { BingMap, IMark } from '../components/Map/BingMap';
 
 export const Locations: React.FC = () => {
   const [incidents, setIncidents] = useState<IIncidentEvent[] | undefined>([]);

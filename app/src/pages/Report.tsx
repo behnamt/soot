@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
+import { Box, TextField, Button, Checkbox, FormControlLabel, FormControl, InputLabel, MenuItem, Select } from '@material-ui/core';
 import { useSoot } from '../context/Soot';
 import { usePosition } from '../hooks/usePosition';
-import { Box, TextField, Button, Checkbox, FormControlLabel, FormControl, InputLabel, MenuItem, Select } from '@material-ui/core';
 import { useWeb3 } from '../context/Web3';
 import { useEvents } from '../context/Event';
-import { BingMap } from '../components/BingMap';
+import { BingMap } from '../components/Map/BingMap';
 
 export const Report: React.FC = () => {
   const [name, setName] = useState('');
