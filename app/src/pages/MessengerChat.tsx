@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { Box, IconButton, TextField, Typography } from '@material-ui/core';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
+import { useAsync } from 'react-async';
+import { Send } from '@material-ui/icons';
+import { Box, IconButton, TextField, Typography } from '@material-ui/core';
+import makeBlockie from 'ethereum-blockies-base64';
 import { useWeb3 } from '../context/Web3';
 import { subscribe, publish, unsubscribe } from '../lib/services/IpfsService';
-import { Send } from '@material-ui/icons';
-import makeBlockie from 'ethereum-blockies-base64';
 import chatStorage from '../lib/services/storage/ChatStorage';
 import { IChatItem } from '../@types/IChat.types';
 
@@ -53,12 +54,10 @@ export const MessengerChat: React.FC = () => {
     };
   }, [participants, messageList]);
 
-  useEffect(() => {
-    (async (): Promise<void> => {
-      const initialChats = await chatStorage.getAllChats();
-      setMessageList(initialChats);
-    })();
-  }, []);
+  useAsync({
+    promiseFn: useCallback(chatStorage.getAllChats, []),
+    onResolve: (initialChats) => setMessageList(initialChats),
+  });
 
   return (
     <Box display="flex" flexDirection="column" justifyContent="flex-end" height="100%">
