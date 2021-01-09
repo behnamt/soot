@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import reportStorage from '../lib/services/storage/ReportStorage';
 import { useSoot } from './Soot';
 import { useWeb3 } from './Web3';
-import { useToast } from './ToastContext';
+import { useToast } from './Toast';
 import { IRepeatedEvent } from '../@types/Event.types';
 
 interface EventsContextInterface {

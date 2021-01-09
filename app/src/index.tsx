@@ -7,7 +7,7 @@ import { SootProvider } from './context/Soot';
 import { App } from './components/App';
 import { IpfsProvider } from './context/IPFS';
 import { EventsProvider } from './context/Event';
-import { ToastProvider } from './context/ToastContext';
+import { ToastProvider } from './context/Toast';
 import Container from '@material-ui/core/Container';
 import { ContextAwareApp } from './components/ContextAwarApp';
 
