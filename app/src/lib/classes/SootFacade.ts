@@ -137,23 +137,6 @@ class SootRegistryFacade {
         )
         .filter((event: IRepeatedEvent) => !this.isTheAuthor(event.author) && this.hasAHistoryEvent(event.name)),
     );
-    // ,
-    //   async (error, event: EventData) => {
-    //     const formattedEvent = {
-    //       author: event.returnValues._author,
-    //       name: hexToUtf8(event.returnValues._name),
-    //       date: formatDate(event.returnValues._date),
-    //     };
-    //     if (await this.hasAHistoryEvent(formattedEvent.name)) {
-    //       if (!this.isTheAuthor(formattedEvent.author)) {
-    //         callback({
-    //           author: event.returnValues._author,
-    //           name: hexToUtf8(event.returnValues._name),
-    //           date: formatDate(event.returnValues._date),
-    //         });
-    //       }
-    //     }
-    //   },
   }
   private hasAHistoryEvent(name: string): Promise<boolean> {
     return reportStorage.isInReports(name);

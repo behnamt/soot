@@ -50,7 +50,7 @@ export const Report: React.FC = () => {
 
   const submit = async (): Promise<void> => {
     if (position) {
-      sootRegistryFacade?.report(
+      sootRegistryFacade.report(
         {
           name,
           description,

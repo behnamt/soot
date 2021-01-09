@@ -23,7 +23,7 @@ const useSootProvider = (): ISootContext => {
         new SootFacade(web3Instance, account, process.env.REACT_APP_SOOT_REGISTRY_CONTRACT_ADDRESS),
       );
     }
-  }, [account]); // eslint-disable-line
+  }, [account]);
 
   return {
     sootRegistryFacade,

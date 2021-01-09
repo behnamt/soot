@@ -22,7 +22,7 @@ export const Locations: React.FC = () => {
         setIncidents(list);
       }
     })();
-  }, [sootRegistryFacade, startPosition, endPosition]);
+  }, [startPosition, endPosition]);
 
   useEffect((): void => {
     (async (): Promise<void> => {

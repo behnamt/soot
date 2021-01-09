@@ -1,10 +1,10 @@
 import React from 'react';
-import { useWeb3 } from '../context/Web3';
+import { useSoot } from '../context/Soot';
 import { Login } from './Auth/Login';
 import { Navigation } from './Layout/Navigation';
 
 export const App: React.FC = () => {
-  const { account } = useWeb3();
+  const { sootRegistryFacade } = useSoot();
 
-  return account ? <Navigation /> : <Login />;
+  return sootRegistryFacade ? <Navigation /> : <Login />;
 };
