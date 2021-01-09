@@ -6,7 +6,7 @@
   "author": "",
   "license": "ISC",
   "scripts": {
-    "test": "jest ./tests",
+    "test": "jest --runInBand --forceExit ./tests",
     "test:watch": "jest --watch ./tests",
     "lint": "solium -d contracts/",
     "lint:fix": "solium -d contracts/ --fix --config ./.soliumrc.json"
