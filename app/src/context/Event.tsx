@@ -4,6 +4,7 @@ import { useSoot } from './Soot';
 import { useWeb3 } from './Web3';
 import { useToast } from './ToastContext';
 import { IRepeatedEvent } from '../@types/Event.types';
+import { getAllRepeatedEvents } from '../lib/modules/Events';
 
 interface EventsContextInterface {
   events: string[];
@@ -49,7 +50,7 @@ const useEventsprovider = (): EventsContextInterface => {
     (async (): Promise<void> => {
       if (sootRegistryFacade && events.length) {
         const newProposedNotifications = { ...proposedNotifications };
-        const allRepeatedEvents = await sootRegistryFacade.getAllRepeatedEvents();
+        const allRepeatedEvents = await getAllRepeatedEvents(sootRegistryFacade);
         allRepeatedEvents.forEach((event: IRepeatedEvent) => {
           const temp = newProposedNotifications[event.name] || [];
           if (!temp.some((item) => item === event.author)) {

@@ -1,14 +1,14 @@
-import { formatDate } from './../utils';
-import { IPosition, IRepeatedEvent } from './../../@types/Event.types';
-import { IIncident, IReport, IIncidentEvent, IFullIncident } from './../../@types/ISoot.types';
 import Web3 from 'web3';
+import { Account } from 'web3-core';
 import { Contract, EventData } from 'web3-eth-contract';
 import { AbiItem, hexToUtf8 } from 'web3-utils';
 import SootRegistryJSON from '../../abi/SootRegistry.json';
-import { v0CidToBytes32, bytes32ToV0Cid, ipfsNode } from '../services/IpfsService';
 import { saveDescription } from '../scripts/saveDescription';
-import { Account } from 'web3-core';
+import { bytes32ToV0Cid, ipfsNode, v0CidToBytes32 } from '../services/IpfsService';
 import reportStorage from '../services/storage/ReportStorage';
+import { IPosition, IRepeatedEvent } from './../../@types/Event.types';
+import { IFullIncident, IIncident, IIncidentEvent, IReport } from './../../@types/ISoot.types';
+import { formatDate } from './../utils';
 
 const GEO_RESOLUTION = 1000000;
 
