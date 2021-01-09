@@ -126,6 +126,9 @@ rebuild: clean ##@development removes images
 	$(MAKE) setup
 .PHONY: rebuild
 
+gh-deploy: ##@deploy to github pages
+	./tools/gh-pages-deploy.sh
+.PHONY: gh-deploy
 ################ service setup #######################
 
 ipfs-cors: ##@development configure IPFS container for CORS
