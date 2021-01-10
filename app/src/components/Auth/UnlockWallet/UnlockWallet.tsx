@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { useWeb3 } from '../../context/Web3';
-import KeyValueWalletService from '../../lib/services/KeyValueWalletService';
-import storage from '../../lib/services/storage/AppStorage.service';
-import { Box, TextField, Button } from '@material-ui/core';
+import { Box, Button, TextField } from '@material-ui/core';
+import { useWeb3 } from '../../../context/Web3';
+import KeyValueWalletService from '../../../lib/services/KeyValueWalletService';
+import storage from '../../../lib/services/storage/AppStorage.service';
 
 export const UnlockWallet: React.FC = () => {
   const [password, setPassword] = useState('');

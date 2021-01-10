@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSoot } from '../context/Soot';
-import { Login } from './Auth/Login';
+import { Login } from './Auth/Login/Login';
 import { Navigation } from './Layout/Navigation';
 
 export const App: React.FC = () => {

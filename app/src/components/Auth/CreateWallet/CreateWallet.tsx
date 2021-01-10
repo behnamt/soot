@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { useWeb3 } from '../../context/Web3';
-import KeyValueWalletService from '../../lib/services/KeyValueWalletService';
-import storage from '../../lib/services/storage/AppStorage.service';
 import { Box, Button, Typography } from '@material-ui/core';
-import { CreateWalletForm } from './CreateWalletForm';
-import { ImportWalletForm } from './ImportWalletForm';
-import createWallet from '../../lib/scripts/createWallet';
-import createWalletFromPrivateKey from '../../lib/scripts/createWalletFromPrivateKey';
+import { useWeb3 } from '../../../context/Web3';
+import createWallet from '../../../lib/scripts/createWallet';
+import createWalletFromPrivateKey from '../../../lib/scripts/createWalletFromPrivateKey';
+import KeyValueWalletService from '../../../lib/services/KeyValueWalletService';
+import storage from '../../../lib/services/storage/AppStorage.service';
+import { CreateWalletForm } from '../CreateWalletForm/CreateWalletForm';
+import { ImportWalletForm } from '../ImportWalletForm/ImportWalletForm';
 
 export const CreateWallet: React.FC = () => {
   const [password, setPassword] = useState('');
