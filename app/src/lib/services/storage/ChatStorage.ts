@@ -1,4 +1,4 @@
-import { IChatItem, IChatStorage } from '../../../@types/IChat.types';
+import { IChatItem, IChatStorage } from '@interfaces/IChat.types';
 import storage from './AppStorage.service';
 import LocalStorage from './LocalStorage';
 

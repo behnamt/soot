@@ -1,6 +1,6 @@
 import { Account } from 'web3-core';
-import WalletService from '../services/WalletService';
-import IPersistentWallet from '../../@types/IPersistentWallet.types';
+import WalletService from '@services/WalletService';
+import IPersistentWallet from '@interfaces/IPersistentWallet.types';
 import createWallet from './createWallet';
 
 const privateKeyRegex = new RegExp('^0x');

@@ -2,8 +2,8 @@ import React, { useState, useContext, useEffect } from 'react';
 import Web3 from 'web3';
 import EthCrypto from 'eth-crypto';
 import { Account, HttpProvider } from 'web3-core';
-import WrappedAccount from '../lib/classes/WrappedAccount';
-import { IWeb3Context } from '../@types/IWeb3Context';
+import WrappedAccount from '@core/WrappedAccount';
+import { IWeb3Context } from '@interfaces/IWeb3Context';
 
 //eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare let ethereum: any;

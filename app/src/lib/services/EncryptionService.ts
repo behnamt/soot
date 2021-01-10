@@ -1,6 +1,6 @@
 import EthCrypto from 'eth-crypto';
 import { Account } from 'web3-core';
-import { IDecryptResult } from '../../@types/IEncryptedDocument';
+import { IDecryptResult } from '@interfaces/IEncryptedDocument';
 
 const encrypt = async (account: Account, message: string, publicKey: string): Promise<string> => {
   const signature = EthCrypto.sign(account.privateKey, EthCrypto.hash.keccak256(message));

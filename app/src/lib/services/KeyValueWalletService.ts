@@ -1,8 +1,8 @@
 import { WalletBase, Account } from 'web3-core';
 import Web3 from 'web3';
 import WalletService from './WalletService';
-import IPersistentWallet from '../../@types/IPersistentWallet.types';
-import { IKeyValueStorage } from '../../@types/IKeyValueStorage.types';
+import IPersistentWallet from '@interfaces/IPersistentWallet.types';
+import { IKeyValueStorage } from '@interfaces/IKeyValueStorage.types';
 
 export default class KeyValueWalletService extends WalletService implements IPersistentWallet {
   private keyValueStore: IKeyValueStorage;

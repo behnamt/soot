@@ -3,12 +3,12 @@ import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
-import { Web3Provider } from './context/Web3';
-import { SootProvider } from './context/Soot';
+import { Web3Provider } from '@contexts/Web3';
+import { SootProvider } from '@contexts/Soot';
 import { App } from './components/App';
-import { IpfsProvider } from './context/IPFS';
-import { EventsProvider } from './context/Event';
-import { ToastProvider } from './context/Toast';
+import { IpfsProvider } from '@contexts/IPFS';
+import { EventsProvider } from '@contexts/Event';
+import { ToastProvider } from '@contexts/Toast';
 import Container from '@material-ui/core/Container';
 import { ContextAwareApp } from './components/ContextAwarApp';
 

@@ -1,8 +1,8 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { useAsync } from 'react-async';
 import styled from 'styled-components';
-import { IBingMap, IMark } from '../../../@types/IMap';
-import { loadBingApi, Microsoft } from '../../../lib/services/BingApi';
+import { IBingMap, IMark } from '@interfaces/IMap';
+import { loadBingApi, Microsoft } from '@services/BingApi';
 
 interface IMapProps {
   mapOptions?: { center: number[] };

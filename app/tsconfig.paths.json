@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@contexts/*": ["./src/context/*"],
+      "@interfaces/*": ["./src/@types/*"],
+      "@atoms/*": ["./src/components/atoms/*"],
+      "@molecules/*": ["./src/components/molecules/*"],
+      "@organisms/*": ["./src/components/organisms/*"],
+      "@pages/*": ["./src/components/pages/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@core/*": ["./src/lib/classes/*"],
+      "@services/*": ["./src/lib/services/*"],
+      "@scripts/*": ["./src/lib/scripts/*"]
+    }
+  }
+}

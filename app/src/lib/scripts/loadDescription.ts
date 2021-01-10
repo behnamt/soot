@@ -1,6 +1,6 @@
 import { Account } from 'web3-core';
-import { getContent } from '../services/IpfsService';
-import { decrypt } from '../services/EncryptionService';
+import { getContent } from '@services/IpfsService';
+import { decrypt } from '@services/EncryptionService';
 
 export const loadDescription = async (account: Account, cid: string, isEncrypted: boolean): Promise<string> => {
   let content = await getContent(cid);

@@ -2,8 +2,8 @@ import Web3 from 'web3';
 import IPFS, { Buffer, CID } from 'ipfs';
 import ipfsClient from 'ipfs-http-client';
 
-import { IpfsConfigInterface } from '../../@types/IpfsConfig.types';
-import { IpfsTreeItemInterface } from '../../@types/Ipfs.types';
+import { IpfsConfigInterface } from '@interfaces/IpfsConfig.types';
+import { IpfsTreeItemInterface } from '@interfaces/Ipfs.types';
 
 let ipfsNode: IPFS;
 

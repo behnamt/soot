@@ -3,11 +3,11 @@ import { Account } from 'web3-core';
 import { Contract, EventData } from 'web3-eth-contract';
 import { AbiItem, hexToUtf8 } from 'web3-utils';
 import SootRegistryJSON from '../../abi/SootRegistry.json';
-import { saveDescription } from '../scripts/saveDescription';
-import { bytes32ToV0Cid, ipfsNode, v0CidToBytes32 } from '../services/IpfsService';
-import reportStorage from '../services/storage/ReportStorage';
-import { IPosition, IRepeatedEvent } from './../../@types/Event.types';
-import { IFullIncident, IIncident, IIncidentEvent, IReport } from './../../@types/ISoot.types';
+import { saveDescription } from '@scripts/saveDescription';
+import { bytes32ToV0Cid, ipfsNode, v0CidToBytes32 } from '@services/IpfsService';
+import reportStorage from '@services/storage/ReportStorage';
+import { IPosition, IRepeatedEvent } from './@interfaces/Event.types';
+import { IFullIncident, IIncident, IIncidentEvent, IReport } from './@interfaces/ISoot.types';
 import { formatDate } from './../utils';
 
 const GEO_RESOLUTION = 1000000;

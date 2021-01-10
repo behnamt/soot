@@ -4,7 +4,7 @@ import fs from 'fs';
 import { WalletBase, Account } from 'web3-core';
 import Web3 from 'web3';
 import WalletService from './WalletService';
-import IPersistentWallet from '../../@types/IPersistentWallet.types';
+import IPersistentWallet from '@interfaces/IPersistentWallet.types';
 
 export default class FileSystemWalletService extends WalletService implements IPersistentWallet {
   private fileName: string;

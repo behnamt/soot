@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import { useAsync, AsyncState } from 'react-async';
 import IPFS from 'ipfs';
-import { IpfsContextInterface } from '../@types/IpfsContextInterface';
-import { startNode } from '../lib/services/IpfsService';
+import { IpfsContextInterface } from '@interfaces/IpfsContextInterface';
+import { startNode } from '@services/IpfsService';
 
 const ipfsContext = React.createContext<IpfsContextInterface>({
   ipfs: null,

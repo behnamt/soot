@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { IPosition, GeolocationCoordinates, GeolocationPositionError } from '../@types/IPosition';
+import { IPosition, GeolocationCoordinates, GeolocationPositionError } from '@interfaces/IPosition';
 
 const defaultSettings = {
   enableHighAccuracy: false,

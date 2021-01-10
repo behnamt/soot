@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useEvents } from '../../context/Event';
+import { useEvents } from '@contexts/Event';
 import { List } from '@material-ui/core';
-import { MessengerListItem } from '../molecules/MessengerListitem/MessengerListItem';
+import { MessengerListItem } from '@molecules/MessengerListitem/MessengerListItem';
 
 export const Messenger: React.FC = () => {
   const { proposedNotifications } = useEvents();

@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
-import reportStorage from '../lib/services/storage/ReportStorage';
+import reportStorage from '@services/storage/ReportStorage';
 import { useSoot } from './Soot';
 import { useWeb3 } from './Web3';
 import { useToast } from './Toast';
-import { IRepeatedEvent } from '../@types/Event.types';
+import { IRepeatedEvent } from '@interfaces/Event.types';
 
 interface EventsContextInterface {
   events: string[];

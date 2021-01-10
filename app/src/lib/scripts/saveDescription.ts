@@ -1,5 +1,5 @@
 import IPFS, { CID } from 'ipfs';
-import { encrypt } from '../services/EncryptionService';
+import { encrypt } from '@services/EncryptionService';
 import { Account } from 'web3-core';
 
 export const saveDescription = async (

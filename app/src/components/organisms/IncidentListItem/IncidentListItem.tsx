@@ -2,9 +2,9 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { ListItem, ListItemText } from '@material-ui/core';
 import { Async } from 'react-async';
-import { IFullIncident } from '../../../@types/ISoot.types';
+import { IFullIncident } from '@interfaces/ISoot.types';
 import Skeleton from '@material-ui/lab/Skeleton';
-import { useSoot } from '../../../context/Soot';
+import { useSoot } from '@contexts/Soot';
 
 export const IncidentListItem: React.FC<{ id: number }> = (props: { id: number }) => {
   const { id } = props;

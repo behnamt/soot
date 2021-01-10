@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useWeb3 } from './Web3';
-import SootFacade from '../lib/classes/SootFacade';
-import SootRegistryFacade from '../lib/classes/SootFacade';
+import SootFacade from '@core/SootFacade';
+import SootRegistryFacade from '@core/SootFacade';
 
 interface ISootContext {
   sootRegistryFacade: SootRegistryFacade | null;

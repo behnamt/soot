@@ -5,10 +5,10 @@ import makeBlockie from 'ethereum-blockies-base64';
 import { useAsync } from 'react-async';
 import styled from 'styled-components';
 import { useLocation, useParams } from 'react-router-dom';
-import { IChatItem } from '../../@types/IChat.types';
-import { useWeb3 } from '../../context/Web3';
-import { publish, subscribe, unsubscribe } from '../../lib/services/IpfsService';
-import chatStorage from '../../lib/services/storage/ChatStorage';
+import { IChatItem } from '@interfaces/IChat.types';
+import { useWeb3 } from '@contexts/Web3';
+import { publish, subscribe, unsubscribe } from '@services/IpfsService';
+import chatStorage from '@services/storage/ChatStorage';
 
 const StyledBox = styled(Box)`
   overflowy: auto;

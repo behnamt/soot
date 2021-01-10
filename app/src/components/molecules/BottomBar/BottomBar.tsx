@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Box } from '@material-ui/core';
 import { List, FlagOutlined, Map, MessageTwoTone } from '@material-ui/icons';
-import { useEvents } from '../../../context/Event';
-import { NavigationIcon } from '../../atoms/NavigationIcon/NavigationIcon';
+import { useEvents } from '@contexts/Event';
+import { NavigationIcon } from '@atoms/NavigationIcon/NavigationIcon';
 
 export const BottomBar: React.FC = () => {
   const [hasNotificationProposals, setHasNotificationProposals] = useState(false);

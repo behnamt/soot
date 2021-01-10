@@ -1,8 +1,8 @@
 import React, { ReactElement } from 'react';
-import { useSoot } from '../../context/Soot';
-import { useWeb3 } from '../../context/Web3';
+import { useSoot } from '@contexts/Soot';
+import { useWeb3 } from '@contexts/Web3';
 import { List } from '@material-ui/core';
-import { IncidentListItem } from '../organisms/IncidentListItem/IncidentListItem';
+import { IncidentListItem } from '@organisms/IncidentListItem/IncidentListItem';
 import { Async } from 'react-async';
 import { Skeleton } from '@material-ui/lab';
 

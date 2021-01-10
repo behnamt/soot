@@ -1,12 +1,12 @@
 import React, { useCallback, useState } from 'react';
 import { useAsync } from 'react-async';
 import { Box, Button, Typography } from '@material-ui/core';
-import { useWeb3 } from '../../../context/Web3';
-import KeyValueWalletService from '../../../lib/services/KeyValueWalletService';
-import storage from '../../../lib/services/storage/AppStorage.service';
-import { LoginHeader } from '../../atoms/LoginHeader/LoginHeader';
+import { useWeb3 } from '@contexts/Web3';
+import KeyValueWalletService from '@services/KeyValueWalletService';
+import storage from '@services/storage/AppStorage.service';
+import { LoginHeader } from '@atoms/LoginHeader/LoginHeader';
 import { CreateWallet } from '../CreateWallet/CreateWallet';
-import { UnlockWallet } from '../../molecules/UnlockWallet/UnlockWallet';
+import { UnlockWallet } from '@molecules/UnlockWallet/UnlockWallet';
 
 const getWallet = async (web3Instance): Promise<KeyValueWalletService> => {
   try {

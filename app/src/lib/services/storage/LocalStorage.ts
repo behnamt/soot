@@ -1,4 +1,4 @@
-import { IKeyValueStorage } from '../../../@types/IKeyValueStorage.types';
+import { IKeyValueStorage } from '@interfaces/IKeyValueStorage.types';
 
 export default class LocalStorage implements IKeyValueStorage {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
