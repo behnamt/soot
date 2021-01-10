@@ -19,7 +19,6 @@
     "ipfs": "^0.50.1",
     "ipfs-http-client": "^46.1.1",
     "js-ipfs": "^0.0.301",
-    "node-sass": "^4.0.0",
     "react": "^17.0.1",
     "react-async": "^10.0.1",
     "react-dom": "^17.0.1",
