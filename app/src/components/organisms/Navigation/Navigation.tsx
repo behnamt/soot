@@ -24,6 +24,9 @@ export const Navigation: React.FC = () => {
           <Route exact path="/">
             <Report />
           </Route>
+          <Route exact path="/soot">
+            <Report />
+          </Route>
           <Route exact path="/locations">
             <Locations />
           </Route>
