@@ -15,8 +15,8 @@ import { ContextAwareApp } from './components/ContextAwarApp';
 const StyledContainer = styled(Container)`
   background-color: white;
   height: 100vh;
-  padding-left: 0;
-  padding-right: 0;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 `;
 
 ReactDOM.render(
