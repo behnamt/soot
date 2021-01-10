@@ -27,10 +27,11 @@ contract SootRegistry is Initializable, OwnableUpgradeSafe {
 
     // all incidents
     IncidentReport[] incidents;
-    uint256 incidents_size = 0;
+    uint256 incidents_size;
 
     function initialize() public initializer {
         __Ownable_init();
+        incidents_size = 0;
     }
 
     event Register(

@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from 'react';
 import { Alert, AlertTitle } from '@material-ui/lab';
-import { useSoot } from '../context/Soot';
-import { IIncidentEvent } from '../@types/ISoot.types';
-import { usePosition } from '../hooks/usePosition';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useAsync } from 'react-async';
 import { IPosition } from '../@types/Event.types';
+import { IIncidentEvent } from '../@types/ISoot.types';
 import { BingMap, IMark } from '../components/Map/BingMap';
+import { useSoot } from '../context/Soot';
+import { usePosition } from '../hooks/usePosition';
+
+const VIRTUAL_EARTH_API = 'http://dev.virtualearth.net/REST/v1/Locations';
 
 export const Locations: React.FC = () => {
   const [incidents, setIncidents] = useState<IIncidentEvent[] | undefined>([]);
@@ -24,26 +27,27 @@ export const Locations: React.FC = () => {
     })();
   }, [startPosition, endPosition]);
 
-  useEffect((): void => {
-    (async (): Promise<void> => {
-      if (position) {
-        const response = await fetch(
-          `http://dev.virtualearth.net/REST/v1/Locations/${position.latitude},${position.longitude}?key=${process.env.REACT_APP_BING_API_KEY}`,
-        );
-        const body = await response.json();
-        const locality = body.resourceSets[0].resources[0].address.locality;
+  useAsync({
+    promiseFn: useCallback(async () => {
+      const response = await fetch(
+        `${VIRTUAL_EARTH_API}/${position.latitude},${position.longitude}?key=${process.env.REACT_APP_BING_API_KEY}`,
+      );
+      const body = await response.json();
+      const locality = body?.resourceSets?.[0].resources?.[0].address?.locality || '';
 
-        const bboxResponse = await fetch(
-          `http://dev.virtualearth.net/REST/v1/Locations?countryRegion=${process.env.REACT_APP_LOCATION}&locality=${locality}&key=${process.env.REACT_APP_BING_API_KEY}`,
-        );
-        const bboxBody = await bboxResponse.json();
-        const bbox = bboxBody.resourceSets[0].resources[0].bbox;
+      const bboxResponse = await fetch(
+        `${VIRTUAL_EARTH_API}?countryRegion=${process.env.REACT_APP_LOCATION}&locality=${locality}&key=${process.env.REACT_APP_BING_API_KEY}`,
+      );
+      const bboxBody = await bboxResponse.json();
 
-        setStartPosition({ lat: bbox[0], lng: bbox[1] });
-        setEndPosition({ lat: bbox[2], lng: bbox[3] });
-      }
-    })();
-  }, [position]);
+      return bboxBody?.resourceSets?.[0].resources?.[0]?.bbox;
+    }, [position]),
+    onResolve: (bbox) => {
+      setStartPosition({ lat: bbox[0], lng: bbox[1] });
+      setEndPosition({ lat: bbox[2], lng: bbox[3] });
+    },
+    watch: position,
+  });
 
   return (
     <>
