@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import styled from 'styled-components';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
 import { Web3Provider } from './context/Web3';
@@ -11,9 +12,16 @@ import { ToastProvider } from './context/Toast';
 import Container from '@material-ui/core/Container';
 import { ContextAwareApp } from './components/ContextAwarApp';
 
+const StyledContainer = styled(Container)`
+  background-color: white;
+  height: 100vh;
+  padding-left: 0;
+  padding-right: 0;
+`;
+
 ReactDOM.render(
   <React.StrictMode>
-    <Container maxWidth="sm" style={{ backgroundColor: 'white', height: '100vh', paddingLeft: 0, paddingRight: 0 }}>
+    <StyledContainer maxWidth="sm">
       <ToastProvider>
         <Web3Provider>
           <SootProvider>
@@ -27,7 +35,7 @@ ReactDOM.render(
           </SootProvider>
         </Web3Provider>
       </ToastProvider>
-    </Container>
+    </StyledContainer>
   </React.StrictMode>,
   document.getElementById('root'),
 );

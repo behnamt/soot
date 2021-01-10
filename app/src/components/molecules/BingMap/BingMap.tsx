@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { useAsync } from 'react-async';
+import styled from 'styled-components';
 import { loadBingApi, Microsoft } from '../../../lib/services/BingApi';
 
 export interface IMark {
@@ -21,6 +22,11 @@ interface IMapProps {
 interface IBingMap {
   entities: string[];
 }
+
+const StyledDiv = styled.div`
+  height: ${({ height }): string => height};
+  width: 100%;
+`;
 
 export const BingMap: React.FC<IMapProps> = (props: IMapProps) => {
   const { mapOptions, marks, height = '80vh' } = props;
@@ -59,14 +65,5 @@ export const BingMap: React.FC<IMapProps> = (props: IMapProps) => {
     }
   }, [map, marks]);
 
-  return (
-    <div
-      ref={mapRef}
-      className="map"
-      style={{
-        height,
-        width: '100%',
-      }}
-    ></div>
-  );
+  return <StyledDiv ref={mapRef} className="map" height={height}></StyledDiv>;
 };

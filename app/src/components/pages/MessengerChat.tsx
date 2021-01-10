@@ -1,13 +1,30 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
-import { useAsync } from 'react-async';
-import { Send } from '@material-ui/icons';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Box, IconButton, TextField, Typography } from '@material-ui/core';
+import { Send } from '@material-ui/icons';
 import makeBlockie from 'ethereum-blockies-base64';
-import { useWeb3 } from '../../context/Web3';
-import { subscribe, publish, unsubscribe } from '../../lib/services/IpfsService';
-import chatStorage from '../../lib/services/storage/ChatStorage';
+import { useAsync } from 'react-async';
+import styled from 'styled-components';
+import { useLocation, useParams } from 'react-router-dom';
 import { IChatItem } from '../../@types/IChat.types';
+import { useWeb3 } from '../../context/Web3';
+import { publish, subscribe, unsubscribe } from '../../lib/services/IpfsService';
+import chatStorage from '../../lib/services/storage/ChatStorage';
+
+const StyledBox = styled(Box)`
+  overflowy: auto;
+  max-height: 70vh;
+`;
+
+const StyledImg = styled.img`7
+  width: 40px;
+  border-radius: 9px;
+  margin-right: 5px;
+  margin-left: 5px; 
+`;
+
+const StyledTextField = styled(TextField)`
+  flex: 1;
+`;
 
 export const MessengerChat: React.FC = () => {
   const { name } = useParams<{ name: string }>();
@@ -65,14 +82,7 @@ export const MessengerChat: React.FC = () => {
         Topic: {name}
       </Box>
 
-      <Box
-        display="flex"
-        flexDirection="column"
-        width="1"
-        flex="10"
-        alignItems="start"
-        style={{ overflowY: 'auto', maxHeight: '70vh' }}
-      >
+      <StyledBox display="flex" flexDirection="column" width="1" flex="10" alignItems="start">
         {messageList.map((message) => (
           <Box
             key={message.id}
@@ -82,21 +92,16 @@ export const MessengerChat: React.FC = () => {
             flexDirection={message.address === account.address ? 'row' : 'row-reverse'}
             alignSelf={message.address === account.address ? 'flex-start' : 'flex-end'}
           >
-            <img
-              src={message.avatar}
-              alt={message.address}
-              style={{ width: '40px', borderRadius: '9px', marginRight: '5px', marginLeft: '5px' }}
-            />
+            <StyledImg src={message.avatar} alt={message.address} />
             <Typography>{message.text}</Typography>
           </Box>
         ))}
-      </Box>
+      </StyledBox>
       <form onSubmit={sendMessage}>
         <Box display="flex" flexDirection="row" width="1" flex="1">
-          <TextField
+          <StyledTextField
             id="current-text"
             variant="outlined"
-            style={{ flex: 1 }}
             value={currentText}
             onChange={(e): void => setCurrentText(e.target.value)}
           />

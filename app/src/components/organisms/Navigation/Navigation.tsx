@@ -1,20 +1,25 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { Report } from '../../pages/Report';
-import { Locations } from '../../pages/Locations';
 import { Box } from '@material-ui/core';
+import styled from 'styled-components';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { BottomBar } from '../../molecules/BottomBar/BottomBar';
+import { MenuBar } from '../../molecules/MenuBar/MenuBar';
 import { Incidents } from '../../pages/Incidents';
-import { IncidentDetail } from '../IncidentDetail/IncidentDetail';
+import { Locations } from '../../pages/Locations';
 import { Messenger } from '../../pages/Messenger';
 import { MessengerChat } from '../../pages/MessengerChat';
-import { MenuBar } from '../../molecules/MenuBar/MenuBar';
+import { Report } from '../../pages/Report';
+import { IncidentDetail } from '../IncidentDetail/IncidentDetail';
+
+const StyledBox = styled(Box)`
+  height: 80vh;
+`;
 
 export const Navigation: React.FC = () => {
   return (
     <BrowserRouter>
       <MenuBar />
-      <Box style={{ height: '80vh' }}>
+      <StyledBox>
         <Switch>
           <Route exact path="/">
             <Report />
@@ -35,7 +40,7 @@ export const Navigation: React.FC = () => {
             <IncidentDetail />
           </Route>
         </Switch>
-      </Box>
+      </StyledBox>
       <BottomBar />
     </BrowserRouter>
   );

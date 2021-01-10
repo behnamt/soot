@@ -1,12 +1,18 @@
+import React from 'react';
 import { Box, ListItem, ListItemText } from '@material-ui/core';
 import makeBlockie from 'ethereum-blockies-base64';
-import React from 'react';
 import { useHistory } from 'react-router-dom';
-
+import styled from 'styled-components';
 interface IMessengerListItemProps {
   title: string;
   participants: string[];
 }
+
+const StyledImg = styled.img`
+  margin-left: 5px;
+  width: 30px;
+  border-radius: 4px;
+`;
 
 export const MessengerListItem: React.FC<IMessengerListItemProps> = (props: IMessengerListItemProps) => {
   const { title, participants } = props;
@@ -21,13 +27,7 @@ export const MessengerListItem: React.FC<IMessengerListItemProps> = (props: IMes
           <Box component="span" display="flex" alignContent="center">
             Start chatting with
             {participants.map((item: string) => (
-              <img
-                key={item}
-                src={makeBlockie(item)}
-                title={item}
-                alt={item}
-                style={{ marginLeft: '5px', width: '30px', borderRadius: '4px' }}
-              />
+              <StyledImg key={item} src={makeBlockie(item)} title={item} alt={item} />
             ))}
           </Box>
         }
