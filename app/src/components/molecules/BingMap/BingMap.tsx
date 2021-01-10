@@ -1,26 +1,13 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { useAsync } from 'react-async';
 import styled from 'styled-components';
+import { IBingMap, IMark } from '../../../@types/IMap';
 import { loadBingApi, Microsoft } from '../../../lib/services/BingApi';
-
-export interface IMark {
-  draggable?: boolean;
-  name: string;
-  id: string;
-  location: {
-    lat: number;
-    lng: number;
-  };
-}
 
 interface IMapProps {
   mapOptions?: { center: number[] };
   marks: IMark[] | undefined;
   height?: string;
-}
-
-interface IBingMap {
-  entities: string[];
 }
 
 const StyledDiv = styled.div`
