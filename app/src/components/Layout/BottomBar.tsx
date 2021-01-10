@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Box, IconButton, Typography } from '@material-ui/core';
+import { Box } from '@material-ui/core';
 import { List, FlagOutlined, Map, MessageTwoTone } from '@material-ui/icons';
 import { useEvents } from '../../context/Event';
+import { NavigationIcon } from '../atoms/NavigationIcon';
 
 export const BottomBar: React.FC = () => {
   const [hasNotificationProposals, setHasNotificationProposals] = useState(false);
@@ -17,31 +17,12 @@ export const BottomBar: React.FC = () => {
 
   return (
     <Box display="flex" justifyContent="space-between" px={4}>
-      <Link to="/" style={{ display: 'flex', flexDirection: 'column', textDecoration: 'none' }}>
-        <IconButton>
-          <FlagOutlined />
-        </IconButton>
-        <Typography variant="caption">Report</Typography>
-      </Link>
-      <Link to="/locations" style={{ display: 'flex', flexDirection: 'column', textDecoration: 'none' }}>
-        <IconButton>
-          <Map />
-        </IconButton>
-        <Typography variant="caption">Incidents near me</Typography>
-      </Link>
-      <Link to="/incidents" style={{ display: 'flex', flexDirection: 'column', textDecoration: 'none' }}>
-        <IconButton>
-          <List />
-        </IconButton>
-        <Typography variant="caption">My reports</Typography>
-      </Link>
+      <NavigationIcon icon={<FlagOutlined />} link="/" label="Report" />
+      <NavigationIcon icon={<Map />} link="/locations" label="Incidents near me" />
+      <NavigationIcon icon={<List />} link="/incidents" label="My reports" />
+
       {hasNotificationProposals ? (
-        <Link to="/messenger" style={{ display: 'flex', flexDirection: 'column', textDecoration: 'none' }}>
-          <IconButton>
-            <MessageTwoTone />
-          </IconButton>
-          <Typography variant="caption">Messenger</Typography>
-        </Link>
+        <NavigationIcon icon={<MessageTwoTone />} link="/messenger" label="Messenger" />
       ) : null}
     </Box>
   );
