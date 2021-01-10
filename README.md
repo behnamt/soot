@@ -8,6 +8,8 @@
   - Node 12(`nvm install 12`)
 - [Yarn](https://yarnpkg.com/)
   - `nvm use 12 && npm install -g yarn` (optional and soon to be deprecated)
+- create your own BIP-39 Mnmonic [like this](https://iancoleman.io/bip39) and store it in .env and contracts/.env.local 
+- create an account on infura.io and create a project. Store the infura_key in contract/.env.local
 
 ## `make setup` to launch
 
