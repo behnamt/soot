@@ -1,11 +1,11 @@
-import { Alert, AlertTitle } from '@material-ui/lab';
 import React, { useCallback, useEffect, useState } from 'react';
+import { Alert, AlertTitle } from '@material-ui/lab';
 import { useAsync } from 'react-async';
-import { IPosition } from '../@types/Event.types';
-import { IIncidentEvent } from '../@types/ISoot.types';
-import { BingMap, IMark } from '../components/Map/BingMap';
-import { useSoot } from '../context/Soot';
-import { usePosition } from '../hooks/usePosition';
+import { IPosition } from '../../@types/Event.types';
+import { IIncidentEvent } from '../../@types/ISoot.types';
+import { BingMap, IMark } from '../molecules/BingMap/BingMap';
+import { useSoot } from '../../context/Soot';
+import { usePosition } from '../../hooks/usePosition';
 
 const VIRTUAL_EARTH_API = 'http://dev.virtualearth.net/REST/v1/Locations';
 

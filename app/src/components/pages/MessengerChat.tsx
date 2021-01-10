@@ -4,10 +4,10 @@ import { useAsync } from 'react-async';
 import { Send } from '@material-ui/icons';
 import { Box, IconButton, TextField, Typography } from '@material-ui/core';
 import makeBlockie from 'ethereum-blockies-base64';
-import { useWeb3 } from '../context/Web3';
-import { subscribe, publish, unsubscribe } from '../lib/services/IpfsService';
-import chatStorage from '../lib/services/storage/ChatStorage';
-import { IChatItem } from '../@types/IChat.types';
+import { useWeb3 } from '../../context/Web3';
+import { subscribe, publish, unsubscribe } from '../../lib/services/IpfsService';
+import chatStorage from '../../lib/services/storage/ChatStorage';
+import { IChatItem } from '../../@types/IChat.types';
 
 export const MessengerChat: React.FC = () => {
   const { name } = useParams<{ name: string }>();

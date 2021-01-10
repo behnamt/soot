@@ -1,12 +1,12 @@
 import React from 'react';
 import { FilledInput, Box } from '@material-ui/core';
 import Skeleton from '@material-ui/lab/Skeleton';
-import { IFullIncident } from '../../@types/ISoot.types';
-import { useWeb3 } from '../../context/Web3';
-import { loadDescription } from '../../lib/scripts/loadDescription';
+import { IFullIncident } from '../../../@types/ISoot.types';
+import { useWeb3 } from '../../../context/Web3';
+import { loadDescription } from '../../../lib/scripts/loadDescription';
 import { useParams } from 'react-router-dom';
-import { useSoot } from '../../context/Soot';
-import { BingMap } from '../Map/BingMap';
+import { useSoot } from '../../../context/Soot';
+import { BingMap } from '../../molecules/BingMap/BingMap';
 import { Async } from 'react-async';
 
 export const IncidentDetail: React.FC = () => {

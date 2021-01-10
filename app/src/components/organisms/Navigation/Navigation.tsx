@@ -3,12 +3,12 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Report } from '../../pages/Report';
 import { Locations } from '../../pages/Locations';
 import { Box } from '@material-ui/core';
-import { BottomBar } from './BottomBar';
+import { BottomBar } from '../../molecules/BottomBar/BottomBar';
 import { Incidents } from '../../pages/Incidents';
-import { IncidentDetail } from '../Incident/IncidentDetail';
+import { IncidentDetail } from '../IncidentDetail/IncidentDetail';
 import { Messenger } from '../../pages/Messenger';
 import { MessengerChat } from '../../pages/MessengerChat';
-import { MenuBar } from './MenuBar';
+import { MenuBar } from '../../molecules/MenuBar/MenuBar';
 
 export const Navigation: React.FC = () => {
   return (
