@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { IPosition, GeolocationCoordinates, GeolocationPositionError } from '@interfaces/IPosition';
+import { ILocation, GeolocationCoordinates, GeolocationPositionError } from '@interfaces/IPosition';
 
 const defaultSettings = {
   enableHighAccuracy: false,
@@ -7,16 +7,14 @@ const defaultSettings = {
   maximumAge: 0,
 };
 
-export const usePosition = (settings = defaultSettings): { position: IPosition; error: string } => {
-  const [position, setPosition] = useState<IPosition>();
+export const usePosition = (settings = defaultSettings): { position: ILocation; error: string } => {
+  const [position, setPosition] = useState<ILocation>();
   const [error, setError] = useState('');
 
-  const onChange = ({ coords, timestamp }: { coords: GeolocationCoordinates; timestamp: number }): void => {
+  const onChange = ({ coords }: { coords: GeolocationCoordinates }): void => {
     setPosition({
       latitude: coords.latitude,
       longitude: coords.longitude,
-      accuracy: coords.accuracy,
-      timestamp,
     });
   };
 

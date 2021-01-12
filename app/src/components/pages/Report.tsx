@@ -11,10 +11,12 @@ import {
   Select,
 } from '@material-ui/core';
 import { useSoot } from '@contexts/Soot';
+import { useToast } from '@contexts/Toast';
 import { usePosition } from '@hooks/usePosition';
 import { useWeb3 } from '@contexts/Web3';
 import { useEvents } from '@contexts/Event';
 import { BingMap } from '@molecules/BingMap/BingMap';
+import { ILocation } from '@interfaces/IPosition';
 
 const harassmentTypes = [
   {
@@ -39,6 +41,7 @@ export const Report: React.FC = () => {
   const { sootRegistryFacade } = useSoot();
   const { account, getPublicKey } = useWeb3();
   const { addReportEvent } = useEvents();
+  const { add } = useToast();
 
   const { position } = usePosition();
 
@@ -47,16 +50,18 @@ export const Report: React.FC = () => {
   const [description, setDescription] = useState<string>('');
   const [isEncrypted, setIsEncrypted] = useState<boolean>(false);
   const [isCurrentLocation, setIsCurrentLocation] = useState<boolean>(true);
+  const [customPosition, setCustomPosition] = useState<ILocation>(null);
 
   const submit = async (): Promise<void> => {
-    if (position) {
+    const reportPosition = isCurrentLocation ? position : customPosition;
+    if (reportPosition) {
       sootRegistryFacade.report(
         {
           name,
           description,
           isEncrypted,
-          lat: position?.latitude,
-          lon: position?.longitude,
+          latitude: reportPosition?.latitude,
+          longitude: reportPosition?.longitude,
         },
         account,
         getPublicKey,
@@ -64,7 +69,13 @@ export const Report: React.FC = () => {
       addReportEvent(name);
       setName('');
       setDescription('');
+    } else {
+      add('Please select a location on map or enable your location sharing');
     }
+  };
+
+  const onMarksChanged = (id: string, location: ILocation): void => {
+    setCustomPosition(location);
   };
 
   return (
@@ -140,16 +151,17 @@ export const Report: React.FC = () => {
             <BingMap
               height="30vh"
               mapOptions={{
-                center: [position?.latitude, position?.longitude],
+                center: [position?.latitude || 0, position?.longitude || 0],
               }}
               marks={[
                 {
                   id: '0',
-                  location: { lat: position?.latitude, lng: position?.longitude },
+                  location: { latitude: position?.latitude || 0, longitude: position?.longitude || 0 },
                   name: 'Drag Me!',
                   draggable: true,
                 },
               ]}
+              onMarksChanged={onMarksChanged}
             />
           </Box>
         ) : null}

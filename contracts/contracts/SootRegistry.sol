@@ -11,8 +11,8 @@ contract SootRegistry is Initializable, OwnableUpgradeSafe {
         bytes32 name;
         bytes32 cid;
         bool isEncrypted;
-        int256 lat;
-        int256 lon;
+        int256 latitude;
+        int256 longitude;
         uint256 date;
         address author;
     }
@@ -40,8 +40,8 @@ contract SootRegistry is Initializable, OwnableUpgradeSafe {
         bytes32 _name,
         bytes32 _cid,
         bool _isEncrypted,
-        int256 _lat,
-        int256 _lon,
+        int256 _latitude,
+        int256 _longitude,
         uint256 _date
     );
 
@@ -54,8 +54,8 @@ contract SootRegistry is Initializable, OwnableUpgradeSafe {
         string memory _name,
         bytes32 _cid,
         bool _isEncrypted,
-        int256 _lat,
-        int256 _lon,
+        int256 _latitude,
+        int256 _longitude,
         uint256 _date
     ) public {
         bytes32 _transformedName = _stringToBytes32(_name);
@@ -67,8 +67,8 @@ contract SootRegistry is Initializable, OwnableUpgradeSafe {
                 _transformedName,
                 _cid,
                 _isEncrypted,
-                _lat,
-                _lon,
+                _latitude,
+                _longitude,
                 _date,
                 msg.sender
             )
@@ -103,8 +103,8 @@ contract SootRegistry is Initializable, OwnableUpgradeSafe {
             _transformedName,
             _cid,
             _isEncrypted,
-            _lat,
-            _lon,
+            _latitude,
+            _longitude,
             _date
         );
 
@@ -163,26 +163,26 @@ contract SootRegistry is Initializable, OwnableUpgradeSafe {
         returns (
             uint256[] memory ids,
             bytes32[] memory names,
-            int256[] memory lats,
-            int256[] memory lons,
+            int256[] memory latitudes,
+            int256[] memory longitudes,
             bool[] memory isEncrypteds
         )
     {
         ids = new uint256[](incidents_size);
         names = new bytes32[](incidents_size);
-        lats = new int256[](incidents_size);
-        lons = new int256[](incidents_size);
+        latitudes = new int256[](incidents_size);
+        longitudes = new int256[](incidents_size);
         isEncrypteds = new bool[](incidents_size);
 
         for (uint256 i = 0; i < incidents_size; i++) {
             IncidentReport memory incident = incidents[i];
             ids[i] = incident.id;
             names[i] = incident.name;
-            lats[i] = incident.lat;
-            lons[i] = incident.lon;
+            latitudes[i] = incident.latitude;
+            longitudes[i] = incident.longitude;
             isEncrypteds[i] = incident.isEncrypted;
         }
-        return (ids, names, lats, lons, isEncrypteds);
+        return (ids, names, latitudes, longitudes, isEncrypteds);
     }
 
     function getIncident(uint256 id)
@@ -190,8 +190,8 @@ contract SootRegistry is Initializable, OwnableUpgradeSafe {
         view
         returns (
             bytes32 name,
-            int256 lat,
-            int256 lon,
+            int256 latitude,
+            int256 longitude,
             bytes32 cid,
             bool isEncrypted,
             uint256 date,
@@ -200,8 +200,8 @@ contract SootRegistry is Initializable, OwnableUpgradeSafe {
     {
         return (
             incidents[id].name,
-            incidents[id].lat,
-            incidents[id].lon,
+            incidents[id].latitude,
+            incidents[id].longitude,
             incidents[id].cid,
             incidents[id].isEncrypted,
             incidents[id].date,

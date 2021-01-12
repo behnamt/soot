@@ -1,35 +1,29 @@
-export interface IFullIncident {
+import { ILocation } from './IPosition';
+
+export interface IFullIncident extends ILocation {
   name: string;
-  lat: number;
-  lon: number;
   cid: string;
   date: string;
   isEncrypted: boolean;
   author: string;
 }
 
-export interface IIncidentEvent {
+export interface IIncidentEvent extends ILocation {
   id: string;
   name: string;
-  lat: number;
-  lon: number;
   cid: string;
   date: string;
   isEncrypted: boolean;
 }
 
-export interface IIncident {
+export interface IIncident extends ILocation {
   id: string;
   name: string;
-  lat: number;
-  lon: number;
   isEncrypted: boolean;
 }
 
-export interface IReport {
+export interface IReport extends ILocation {
   name: string;
   description: string;
-  lat: number;
-  lon: number;
   isEncrypted: boolean;
 }

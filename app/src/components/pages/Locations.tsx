@@ -1,18 +1,19 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import { useAsync } from 'react-async';
-import { IPosition } from '@interfaces/Event.types';
 import { IIncidentEvent } from '@interfaces/ISoot.types';
-import { BingMap, IMark } from '@molecules/BingMap/BingMap';
+import { BingMap } from '@molecules/BingMap/BingMap';
 import { useSoot } from '@contexts/Soot';
 import { usePosition } from '@hooks/usePosition';
+import { IMark } from '@interfaces/IMap';
+import { ILocation } from '@interfaces/IPosition';
 
 const VIRTUAL_EARTH_API = 'http://dev.virtualearth.net/REST/v1/Locations';
 
 export const Locations: React.FC = () => {
   const [incidents, setIncidents] = useState<IIncidentEvent[] | undefined>([]);
-  const [startPosition, setStartPosition] = useState<IPosition | null>(null);
-  const [endPosition, setEndPosition] = useState<IPosition | null>(null);
+  const [startPosition, setStartPosition] = useState<ILocation | null>(null);
+  const [endPosition, setEndPosition] = useState<ILocation | null>(null);
 
   const { sootRegistryFacade } = useSoot();
   const { position, error } = usePosition();
@@ -43,8 +44,8 @@ export const Locations: React.FC = () => {
       return bboxBody?.resourceSets?.[0].resources?.[0]?.bbox;
     }, [position]),
     onResolve: (bbox) => {
-      setStartPosition({ lat: bbox[0], lng: bbox[1] });
-      setEndPosition({ lat: bbox[2], lng: bbox[3] });
+      setStartPosition({ latitude: bbox[0], longitude: bbox[1] });
+      setEndPosition({ latitude: bbox[2], longitude: bbox[3] });
     },
     watch: position,
   });
@@ -63,7 +64,11 @@ export const Locations: React.FC = () => {
             center: [position?.latitude, position?.longitude],
           }}
           marks={incidents?.map(
-            (item): IMark => ({ id: item.id, name: item.name, location: { lat: item.lat, lng: item.lon } }),
+            (item): IMark => ({
+              id: item.id,
+              name: item.name,
+              location: { latitude: item.latitude, longitude: item.longitude },
+            }),
           )}
         />
       )}

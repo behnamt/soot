@@ -3,11 +3,13 @@ import { useAsync } from 'react-async';
 import styled from 'styled-components';
 import { IBingMap, IMark } from '@interfaces/IMap';
 import { loadBingApi, Microsoft } from '@services/BingApi';
+import { ILocation } from '@interfaces/IPosition';
 
 interface IMapProps {
   mapOptions?: { center: number[] };
   marks: IMark[] | undefined;
   height?: string;
+  onMarksChanged?: (id: string, location: ILocation) => void;
 }
 
 const StyledDiv = styled.div`
@@ -16,7 +18,7 @@ const StyledDiv = styled.div`
 `;
 
 export const BingMap: React.FC<IMapProps> = (props: IMapProps) => {
-  const { mapOptions, marks, height = '80vh' } = props;
+  const { mapOptions, marks, height = '80vh', onMarksChanged } = props;
 
   const mapRef = useRef<HTMLDivElement>(null);
 
@@ -39,7 +41,7 @@ export const BingMap: React.FC<IMapProps> = (props: IMapProps) => {
   useEffect(() => {
     if (map && marks?.length) {
       marks.forEach((mark) => {
-        const loc = new Microsoft.Maps.Location(mark.location.lat, mark.location.lng);
+        const loc = new Microsoft.Maps.Location(mark.location.latitude, mark.location.longitude);
         const pin = new Microsoft.Maps.Pushpin(loc, {
           title: mark.name,
           text: mark.id,
@@ -48,6 +50,12 @@ export const BingMap: React.FC<IMapProps> = (props: IMapProps) => {
 
         //Add the pushpin to the map
         map.entities.push(pin);
+        Microsoft.Maps.Events.addHandler(pin, 'dragend', () =>
+          onMarksChanged(mark.id, {
+            latitude: pin.changing.lastInvokedArgs.newValue.latitude,
+            longitude: pin.changing.lastInvokedArgs.newValue.longitude,
+          }),
+        );
       });
     }
   }, [map, marks]);

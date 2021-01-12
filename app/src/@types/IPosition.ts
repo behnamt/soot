@@ -16,9 +16,7 @@ export interface GeolocationCoordinates {
   readonly speed: number | null;
 }
 
-export interface IPosition {
+export interface ILocation {
   latitude: number;
   longitude: number;
-  accuracy: number;
-  timestamp: number;
 }

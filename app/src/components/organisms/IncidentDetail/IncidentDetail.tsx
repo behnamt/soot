@@ -43,9 +43,15 @@ export const IncidentDetail: React.FC = () => {
             </Async>
             <BingMap
               mapOptions={{
-                center: [incident.lat, incident.lon],
+                center: [incident.latitude, incident.longitude],
               }}
-              marks={[{ id: '1', name: incident.name, location: { lat: incident.lat, lng: incident.lon } }]}
+              marks={[
+                {
+                  id: '1',
+                  name: incident.name,
+                  location: { latitude: incident.latitude, longitude: incident.longitude },
+                },
+              ]}
               height="50vh"
             />
           </Box>
@@ -54,24 +60,4 @@ export const IncidentDetail: React.FC = () => {
       <Async.Rejected>{`could not fetch the incident`}</Async.Rejected>
     </Async>
   );
-
-  // return incident ? (
-  //   <Box display="flex" flexDirection="column" p={2}>
-  //     <FilledInput value={incident.author} />
-  //     <FilledInput value={incident.name} />
-  //     <FilledInput value={incident.date} />
-  //     {description ? <FilledInput value={description} /> : <Skeleton />}
-  //     <BingMap
-  //       mapOptions={{
-  //         center: [incident.lat, incident.lon],
-  //       }}
-  //       marks={[{ id: '1', name: incident.name, location: { lat: incident.lat, lng: incident.lon } }]}
-  //       height="50vh"
-  //     />
-  //   </Box>
-  // ) : (
-  //   <Box>
-  //     <Skeleton />
-  //   </Box>
-  // );
 };
