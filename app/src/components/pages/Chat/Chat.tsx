@@ -15,18 +15,18 @@ const StyledBox = styled(Box)`
   max-height: 70vh;
 `;
 
-const StyledImg = styled.img`7
+const StyledImg = styled.img`
   width: 40px;
   border-radius: 9px;
   margin-right: 5px;
-  margin-left: 5px; 
+  margin-left: 5px;
 `;
 
 const StyledTextField = styled(TextField)`
   flex: 1;
 `;
 
-export const MessengerChat: React.FC = () => {
+export const Chat: React.FC = () => {
   const { name } = useParams<{ name: string }>();
   const location: { state: string[] } = useLocation();
   const { account } = useWeb3();
