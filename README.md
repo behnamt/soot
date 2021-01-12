@@ -29,5 +29,14 @@
 Look through the frontend [README](app/README.md)
 
 #### TODO
-1. move all fetch apis to constants
-1. use react-async to call api and remove async useEffects :(
+1. [] move all fetch apis to constants
+1. [x] ~~use react-async to call api and remove async useEffects~~ :(
+1. [] implement token-based incidents
+1. [] implement contract-tests for tocken-bases
+1. [] refactor messenger component to use orbitDB
+1. [] investigate on how to validate participants in a chat room using blockchain status
+1. [] fix encryption of an incident with client's key
+1. [] post an incident with a custom location on map
+1. [] update node to v.14
+1. [] move core outside of src directory
+1. [] encrypt harasser's name to stop mobing
