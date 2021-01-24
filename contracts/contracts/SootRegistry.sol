@@ -36,12 +36,9 @@ contract SootRegistry {
 
     // all incidents
     IncidentReport[] incidents;
-    uint256 incidents_size;
     SootToken deployedToken;
 
     constructor(address _tokenDeployedAddress) public {
-        incidents_size = 0;
-        
         deployedToken = SootToken(
             _tokenDeployedAddress
         );
@@ -63,6 +60,7 @@ contract SootRegistry {
         bytes32 _transformedName = _stringToBytes32(_name);
 
         uint tokenId = deployedToken.getCurrentTokenId();
+        victimToTokenId[msg.sender][getTokenCount()] = tokenId;
         deployedToken.mintToken(msg.sender, tokenId, _cid);
         // add to incidents store
         incidents.push(
@@ -80,8 +78,7 @@ contract SootRegistry {
 
         // add victimToTokenId item
         // uint8 currentVictimIncidentCount = victimIncidentCount[msg.sender];
-        victimToTokenId[msg
-            .sender][getTokenCount()] = tokenId;
+        
         // victimIncidentCount[msg.sender] = uint8(
         //     SafeMath.add(currentVictimIncidentCount, 1)
         // );
@@ -120,27 +117,26 @@ contract SootRegistry {
     //     incidents[_id].cid = _cid;
     // }
 
-    // // ------------------------------------------------------------
-    // // View functions
-    // // ------------------------------------------------------------
-    // function getAllReportsOfVictim(address _victim)
-    //     public
-    //     view
-    //     returns (
-    //         uint256[] memory ids
-    //     )
-    // {
-    //     uint8 currentVictimIncidentCount = victimIncidentCount[_victim];
+    // ------------------------------------------------------------
+    // View functions
+    // ------------------------------------------------------------
+    function getAllReports()
+        public
+        view
+        returns (
+            uint256[] memory ids
+        )
+    {
+        uint256 currentVictimIncidentCount = getTokenCount();
 
-    //     ids = new uint256[](currentVictimIncidentCount);
+        ids = new uint256[](currentVictimIncidentCount);
 
-    //     for (uint8 i = 0; i < currentVictimIncidentCount; i++) {
-    //         uint256 currentIncidentId = victimToTokenId[_victim][i];
-
-    //         ids[i] = currentIncidentId;
-    //     }
-    //     return (ids);
-    // }
+        for (uint256 i = 0; i < currentVictimIncidentCount; i++) {
+            uint256 currentIncidentId = victimToTokenId[msg.sender][i];
+            ids[i] = currentIncidentId;
+        }
+        return (ids);
+    }
 
     // function getAllVictimsOnMolester(string memory _name)
     //     public
