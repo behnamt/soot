@@ -1,7 +1,8 @@
 {
   "manifestVersion": "2.2",
   "contracts": {
-    "SootRegistry": "SootRegistry"
+    "SootRegistry": "SootRegistry",
+    "SootToken": "SootToken"
   },
   "dependencies": {},
   "name": "@soot/contracts",

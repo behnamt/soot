@@ -10,10 +10,14 @@ contract SootToken is ERC721 {
     currentTokenId = 1;
   }
 
-  function mintToken(address ownerAddress, string memory cid) public {
-    _safeMint(ownerAddress, currentTokenId);
-    _setTokenURI(currentTokenId, cid);
+  function mintToken(address ownerAddress, uint256 tokenId, string memory cid) public {
+    _safeMint(ownerAddress, tokenId);
+    _setTokenURI(tokenId, cid);
     _increaseTokenId();
+  }
+
+  function getCurrentTokenId() public view returns(uint){
+    return currentTokenId;
   }
 
   function _increaseTokenId() private {

@@ -1,15 +1,13 @@
 // SPDX-License-Identifier: Unlicense
 pragma solidity ^0.6.0;
 
-import "@openzeppelin/contracts-ethereum-package/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts-ethereum-package/contracts/Initializable.sol";
-import "@openzeppelin/contracts-ethereum-package/contracts/math/SafeMath.sol";
+import "@openzeppelin/contracts/math/SafeMath.sol";
+import "./SootToken.sol";
 
-contract SootRegistry is Initializable, OwnableUpgradeSafe {
+contract SootRegistry {
     struct IncidentReport {
         uint256 id;
         bytes32 name;
-        bytes32 cid;
         bool isEncrypted;
         int256 latitude;
         int256 longitude;
@@ -17,9 +15,20 @@ contract SootRegistry is Initializable, OwnableUpgradeSafe {
         address author;
     }
 
+    event Register(
+        uint256 id,
+        address _from,
+        bytes32 _name,
+        string _cid,
+        bool _isEncrypted,
+        int256 _latitude,
+        int256 _longitude,
+        uint256 _date
+    );
+
     // victim > incident
-    mapping(address => mapping(uint8 => uint256)) victimToIncidentId;
-    mapping(address => uint8) victimIncidentCount;
+    mapping(address => mapping(uint256 => uint256)) victimToTokenId;
+    // mapping(address => uint8) victimIncidentCount;
 
     // molester > victim
     mapping(bytes32 => mapping(uint8 => address)) molesterToVictim;
@@ -28,22 +37,15 @@ contract SootRegistry is Initializable, OwnableUpgradeSafe {
     // all incidents
     IncidentReport[] incidents;
     uint256 incidents_size;
+    SootToken deployedToken;
 
-    function initialize() public initializer {
-        __Ownable_init();
+    constructor(address _tokenDeployedAddress) public {
         incidents_size = 0;
+        
+        deployedToken = SootToken(
+            _tokenDeployedAddress
+        );
     }
-
-    event Register(
-        uint256 id,
-        address _from,
-        bytes32 _name,
-        bytes32 _cid,
-        bool _isEncrypted,
-        int256 _latitude,
-        int256 _longitude,
-        uint256 _date
-    );
 
     event RepeatedAttack(bytes32 indexed _name, address indexed _author, uint256 _date);
 
@@ -52,7 +54,7 @@ contract SootRegistry is Initializable, OwnableUpgradeSafe {
     // ------------------------------------------------------------
     function register(
         string memory _name,
-        bytes32 _cid,
+        string memory _cid,
         bool _isEncrypted,
         int256 _latitude,
         int256 _longitude,
@@ -60,12 +62,13 @@ contract SootRegistry is Initializable, OwnableUpgradeSafe {
     ) public {
         bytes32 _transformedName = _stringToBytes32(_name);
 
+        uint tokenId = deployedToken.getCurrentTokenId();
+        deployedToken.mintToken(msg.sender, tokenId, _cid);
         // add to incidents store
         incidents.push(
             IncidentReport(
-                incidents_size,
+                tokenId,
                 _transformedName,
-                _cid,
                 _isEncrypted,
                 _latitude,
                 _longitude,
@@ -74,13 +77,14 @@ contract SootRegistry is Initializable, OwnableUpgradeSafe {
             )
         );
 
-        // add victimToIncidentId item
-        uint8 currentVictimIncidentCount = victimIncidentCount[msg.sender];
-        victimToIncidentId[msg
-            .sender][currentVictimIncidentCount] = incidents_size;
-        victimIncidentCount[msg.sender] = uint8(
-            SafeMath.add(currentVictimIncidentCount, 1)
-        );
+
+        // add victimToTokenId item
+        // uint8 currentVictimIncidentCount = victimIncidentCount[msg.sender];
+        victimToTokenId[msg
+            .sender][getTokenCount()] = tokenId;
+        // victimIncidentCount[msg.sender] = uint8(
+        //     SafeMath.add(currentVictimIncidentCount, 1)
+        // );
 
         // add molesterToVictim item
 
@@ -98,7 +102,7 @@ contract SootRegistry is Initializable, OwnableUpgradeSafe {
         }
 
         emit Register(
-            incidents_size,
+            tokenId,
             msg.sender,
             _transformedName,
             _cid,
@@ -109,104 +113,108 @@ contract SootRegistry is Initializable, OwnableUpgradeSafe {
         );
 
         // update counters
-        incidents_size++;
+        // incidents_size++;
     }
 
-    function updateCidOfIncident(uint256 _id, bytes32 _cid) public {
-        incidents[_id].cid = _cid;
-    }
+    // function updateCidOfIncident(uint256 _id, bytes32 _cid) public {
+    //     incidents[_id].cid = _cid;
+    // }
 
-    // ------------------------------------------------------------
-    // View functions
-    // ------------------------------------------------------------
-    function getAllReportsOfVictim(address _victim)
-        public
-        view
-        returns (
-            uint256[] memory ids
-        )
-    {
-        uint8 currentVictimIncidentCount = victimIncidentCount[_victim];
+    // // ------------------------------------------------------------
+    // // View functions
+    // // ------------------------------------------------------------
+    // function getAllReportsOfVictim(address _victim)
+    //     public
+    //     view
+    //     returns (
+    //         uint256[] memory ids
+    //     )
+    // {
+    //     uint8 currentVictimIncidentCount = victimIncidentCount[_victim];
 
-        ids = new uint256[](currentVictimIncidentCount);
+    //     ids = new uint256[](currentVictimIncidentCount);
 
-        for (uint8 i = 0; i < currentVictimIncidentCount; i++) {
-            uint256 currentIncidentId = victimToIncidentId[_victim][i];
+    //     for (uint8 i = 0; i < currentVictimIncidentCount; i++) {
+    //         uint256 currentIncidentId = victimToTokenId[_victim][i];
 
-            ids[i] = currentIncidentId;
-        }
-        return (ids);
-    }
+    //         ids[i] = currentIncidentId;
+    //     }
+    //     return (ids);
+    // }
 
-    function getAllVictimsOnMolester(string memory _name)
-        public
-        view
-        returns (address[] memory victims)
-    {
-        bytes32 _transformedName = _stringToBytes32(_name);
+    // function getAllVictimsOnMolester(string memory _name)
+    //     public
+    //     view
+    //     returns (address[] memory victims)
+    // {
+    //     bytes32 _transformedName = _stringToBytes32(_name);
 
 
-            uint8 currentMolesterIncidentCount
-         = molesterIncidentCount[_transformedName];
-        victims = new address[](currentMolesterIncidentCount);
+    //         uint8 currentMolesterIncidentCount
+    //      = molesterIncidentCount[_transformedName];
+    //     victims = new address[](currentMolesterIncidentCount);
 
-        for (uint8 i = 0; i < currentMolesterIncidentCount; i++) {
-            victims[i] = molesterToVictim[_transformedName][i];
-        }
+    //     for (uint8 i = 0; i < currentMolesterIncidentCount; i++) {
+    //         victims[i] = molesterToVictim[_transformedName][i];
+    //     }
 
-        return victims;
-    }
+    //     return victims;
+    // }
 
-    function getAllIncidents()
-        public
-        view
-        returns (
-            uint256[] memory ids,
-            bytes32[] memory names,
-            int256[] memory latitudes,
-            int256[] memory longitudes,
-            bool[] memory isEncrypteds
-        )
-    {
-        ids = new uint256[](incidents_size);
-        names = new bytes32[](incidents_size);
-        latitudes = new int256[](incidents_size);
-        longitudes = new int256[](incidents_size);
-        isEncrypteds = new bool[](incidents_size);
+    // function getAllIncidents()
+    //     public
+    //     view
+    //     returns (
+    //         uint256[] memory ids,
+    //         bytes32[] memory names,
+    //         int256[] memory latitudes,
+    //         int256[] memory longitudes,
+    //         bool[] memory isEncrypteds
+    //     )
+    // {
+    //     ids = new uint256[](incidents_size);
+    //     names = new bytes32[](incidents_size);
+    //     latitudes = new int256[](incidents_size);
+    //     longitudes = new int256[](incidents_size);
+    //     isEncrypteds = new bool[](incidents_size);
 
-        for (uint256 i = 0; i < incidents_size; i++) {
-            IncidentReport memory incident = incidents[i];
-            ids[i] = incident.id;
-            names[i] = incident.name;
-            latitudes[i] = incident.latitude;
-            longitudes[i] = incident.longitude;
-            isEncrypteds[i] = incident.isEncrypted;
-        }
-        return (ids, names, latitudes, longitudes, isEncrypteds);
-    }
+    //     for (uint256 i = 0; i < incidents_size; i++) {
+    //         IncidentReport memory incident = incidents[i];
+    //         ids[i] = incident.id;
+    //         names[i] = incident.name;
+    //         latitudes[i] = incident.latitude;
+    //         longitudes[i] = incident.longitude;
+    //         isEncrypteds[i] = incident.isEncrypted;
+    //     }
+    //     return (ids, names, latitudes, longitudes, isEncrypteds);
+    // }
 
-    function getIncident(uint256 id)
-        public
-        view
-        returns (
-            bytes32 name,
-            int256 latitude,
-            int256 longitude,
-            bytes32 cid,
-            bool isEncrypted,
-            uint256 date,
-            address author
-        )
-    {
-        return (
-            incidents[id].name,
-            incidents[id].latitude,
-            incidents[id].longitude,
-            incidents[id].cid,
-            incidents[id].isEncrypted,
-            incidents[id].date,
-            incidents[id].author
-        );
+    // function getIncident(uint256 id)
+    //     public
+    //     view
+    //     returns (
+    //         bytes32 name,
+    //         int256 latitude,
+    //         int256 longitude,
+    //         bytes32 cid,
+    //         bool isEncrypted,
+    //         uint256 date,
+    //         address author
+    //     )
+    // {
+    //     return (
+    //         incidents[id].name,
+    //         incidents[id].latitude,
+    //         incidents[id].longitude,
+    //         incidents[id].cid,
+    //         incidents[id].isEncrypted,
+    //         incidents[id].date,
+    //         incidents[id].author
+    //     );
+    // }
+
+    function getTokenCount() public view returns (uint) {
+        return deployedToken.balanceOf(msg.sender);
     }
 
     // ------------------------------------------------------------
