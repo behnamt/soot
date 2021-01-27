@@ -138,76 +138,76 @@ contract SootRegistry {
         return (ids);
     }
 
-    // function getAllVictimsOnMolester(string memory _name)
-    //     public
-    //     view
-    //     returns (address[] memory victims)
-    // {
-    //     bytes32 _transformedName = _stringToBytes32(_name);
+    function getAllVictimsOnMolester(string memory _name)
+        public
+        view
+        returns (address[] memory victims)
+    {
+        bytes32 _transformedName = _stringToBytes32(_name);
 
 
-    //         uint8 currentMolesterIncidentCount
-    //      = molesterIncidentCount[_transformedName];
-    //     victims = new address[](currentMolesterIncidentCount);
+            uint8 currentMolesterIncidentCount
+         = molesterIncidentCount[_transformedName];
+        victims = new address[](currentMolesterIncidentCount);
 
-    //     for (uint8 i = 0; i < currentMolesterIncidentCount; i++) {
-    //         victims[i] = molesterToVictim[_transformedName][i];
-    //     }
+        for (uint8 i = 0; i < currentMolesterIncidentCount; i++) {
+            victims[i] = molesterToVictim[_transformedName][i];
+        }
 
-    //     return victims;
-    // }
+        return victims;
+    }
 
-    // function getAllIncidents()
-    //     public
-    //     view
-    //     returns (
-    //         uint256[] memory ids,
-    //         bytes32[] memory names,
-    //         int256[] memory latitudes,
-    //         int256[] memory longitudes,
-    //         bool[] memory isEncrypteds
-    //     )
-    // {
-    //     ids = new uint256[](incidents_size);
-    //     names = new bytes32[](incidents_size);
-    //     latitudes = new int256[](incidents_size);
-    //     longitudes = new int256[](incidents_size);
-    //     isEncrypteds = new bool[](incidents_size);
+    function getAllIncidents()
+        public
+        view
+        returns (
+            uint256[] memory ids,
+            bytes32[] memory names,
+            int256[] memory latitudes,
+            int256[] memory longitudes,
+            bool[] memory isEncrypteds
+        )
+    {
+        uint256 incidentCount = deployedToken.getCurrentTokenId() -1;
+        ids = new uint256[](incidentCount);
+        names = new bytes32[](incidentCount);
+        latitudes = new int256[](incidentCount);
+        longitudes = new int256[](incidentCount);
+        isEncrypteds = new bool[](incidentCount);
 
-    //     for (uint256 i = 0; i < incidents_size; i++) {
-    //         IncidentReport memory incident = incidents[i];
-    //         ids[i] = incident.id;
-    //         names[i] = incident.name;
-    //         latitudes[i] = incident.latitude;
-    //         longitudes[i] = incident.longitude;
-    //         isEncrypteds[i] = incident.isEncrypted;
-    //     }
-    //     return (ids, names, latitudes, longitudes, isEncrypteds);
-    // }
+        for (uint256 i = 0; i < incidentCount; i++) {
+            IncidentReport memory incident = incidents[i];
+            ids[i] = incident.id;
+            names[i] = incident.name;
+            latitudes[i] = incident.latitude;
+            longitudes[i] = incident.longitude;
+            isEncrypteds[i] = incident.isEncrypted;
+        }
+        return (ids, names, latitudes, longitudes, isEncrypteds);
+    }
 
-    // function getIncident(uint256 id)
-    //     public
-    //     view
-    //     returns (
-    //         bytes32 name,
-    //         int256 latitude,
-    //         int256 longitude,
-    //         bytes32 cid,
-    //         bool isEncrypted,
-    //         uint256 date,
-    //         address author
-    //     )
-    // {
-    //     return (
-    //         incidents[id].name,
-    //         incidents[id].latitude,
-    //         incidents[id].longitude,
-    //         incidents[id].cid,
-    //         incidents[id].isEncrypted,
-    //         incidents[id].date,
-    //         incidents[id].author
-    //     );
-    // }
+    function getIncident(uint256 tokenId)
+        public
+        view
+        returns (
+            bytes32 name,
+            int256 latitude,
+            int256 longitude,
+            bytes32 cid,
+            bool isEncrypted,
+            uint256 date,
+            address author
+        )
+    {
+        return (
+            incidents[tokenId].name,
+            incidents[tokenId].latitude,
+            incidents[tokenId].longitude,
+            incidents[tokenId].isEncrypted,
+            incidents[tokenId].date,
+            incidents[tokenId].author
+        );
+    }
 
     function getTokenCount() public view returns (uint) {
         return deployedToken.balanceOf(msg.sender);
