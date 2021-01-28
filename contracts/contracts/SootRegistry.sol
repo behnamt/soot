@@ -186,26 +186,25 @@ contract SootRegistry {
         return (ids, names, latitudes, longitudes, isEncrypteds);
     }
 
-    function getIncident(uint256 tokenId)
+    function getIncident(uint256 incidentId)
         public
         view
         returns (
             bytes32 name,
             int256 latitude,
             int256 longitude,
-            bytes32 cid,
             bool isEncrypted,
             uint256 date,
             address author
         )
     {
         return (
-            incidents[tokenId].name,
-            incidents[tokenId].latitude,
-            incidents[tokenId].longitude,
-            incidents[tokenId].isEncrypted,
-            incidents[tokenId].date,
-            incidents[tokenId].author
+            incidents[incidentId].name,
+            incidents[incidentId].latitude,
+            incidents[incidentId].longitude,
+            incidents[incidentId].isEncrypted,
+            incidents[incidentId].date,
+            incidents[incidentId].author
         );
     }
 

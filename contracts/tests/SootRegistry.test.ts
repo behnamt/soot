@@ -77,5 +77,19 @@ describe('PropertyRegistry Contract', () => {
       
       expect(allIncidents.names.length).toBe(2);
     });
+    
+    it('should get an incident by incident id', async () => {
+      await sootRegistryInstance.register(
+        "a",
+        "some cid",
+        false,
+        123,
+        456,
+        789, { from: Alex }
+      );
+      const incident = await sootRegistryInstance.getIncident(0, { from: Deployer });
+      
+      expect(incident.author).toBe(Alex);
+    });
   });
 });
