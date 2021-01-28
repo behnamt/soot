@@ -26,7 +26,6 @@ export const Login: React.FC = () => {
   useAsync({
     promiseFn: useCallback(() => getWallet(web3Instance), []),
     onResolve: setLocalWallet,
-    onReject: (error: Error) => console.debug(error),
   });
 
   const connectToWallet = (): void => {
