@@ -13,7 +13,6 @@ describe('PropertyRegistry Contract', () => {
   beforeEach(async () => {
     sootTokenInstance = await sootToken.new({ from: Deployer });
     sootRegistryInstance = await sootRegistry.new(sootTokenInstance.address, { from: Deployer });
-    // await sootRegistryInstance.initialize({ from: deployer });
   });
 
   describe('Register', () => {
@@ -43,41 +42,21 @@ describe('PropertyRegistry Contract', () => {
       });
     });
 
-    it('should add two incidents and getAllIncidents', async () => {
+    it('should add two incidents and getAllReports', async () => {
       const idsBefore = await sootRegistryInstance.getAllReports({ from: Alex });
       expect(idsBefore.length).toEqual(0);
       // first
       await sootRegistryInstance.register("some name", "some cid", false, 123, 456, 789, { from: Alex });
       // second
+      await sootRegistryInstance.register("a", "some other cid", false, 1230, 4560, 7890, { from: Bob });
+      // third
       await sootRegistryInstance.register("a", "some other cid", false, 1230, 4560, 7890, { from: Alex });
 
       const idsAfter = await sootRegistryInstance.getAllReports({ from: Alex });
       expect(idsAfter.length).toEqual(2);
-      expect(idsAfter.map((n: typeof BN) => n.toNumber())).toStrictEqual([1, 2]);
+      expect(idsAfter.map((n: typeof BN) => n.toNumber())).toStrictEqual([1, 3]);
     });
 
-    it('should get all incidents', async () => {
-      await sootRegistryInstance.register(
-        "a",
-        "some cid",
-        false,
-        123,
-        456,
-        789, { from: Alex }
-      );
-      await sootRegistryInstance.register(
-        "b",
-        "some cid 2",
-        false,
-        345,
-        567,
-        890, { from: Bob }
-      );
-      const allIncidents = await sootRegistryInstance.getAllIncidents({ from: Deployer });
-      
-      expect(allIncidents.names.length).toBe(2);
-    });
-    
     it('should get an incident by incident id', async () => {
       await sootRegistryInstance.register(
         "a",
@@ -87,9 +66,10 @@ describe('PropertyRegistry Contract', () => {
         456,
         789, { from: Alex }
       );
-      const incident = await sootRegistryInstance.getIncident(0, { from: Deployer });
+      const incident = await sootRegistryInstance.getIncident(1, { from: Alex });
       
       expect(incident.author).toBe(Alex);
+      expect(incident.cid).toBe("some cid");
     });
   });
 });

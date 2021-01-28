@@ -28,14 +28,13 @@ contract SootRegistry {
 
     // victim > incident
     mapping(address => mapping(uint256 => uint256)) victimToTokenId;
-    // mapping(address => uint8) victimIncidentCount;
 
     // molester > victim
     mapping(bytes32 => mapping(uint8 => address)) molesterToVictim;
     mapping(bytes32 => uint8) molesterIncidentCount;
 
     // all incidents
-    IncidentReport[] incidents;
+    mapping(uint256 => IncidentReport) tokenIdToIncident;
     SootToken deployedToken;
 
     constructor(address _tokenDeployedAddress) public {
@@ -63,8 +62,7 @@ contract SootRegistry {
         victimToTokenId[msg.sender][getTokenCount()] = tokenId;
         deployedToken.mintToken(msg.sender, tokenId, _cid);
         // add to incidents store
-        incidents.push(
-            IncidentReport(
+        tokenIdToIncident[tokenId]=IncidentReport(
                 tokenId,
                 _transformedName,
                 _isEncrypted,
@@ -72,20 +70,10 @@ contract SootRegistry {
                 _longitude,
                 _date,
                 msg.sender
-            )
-        );
-
-
-        // add victimToTokenId item
-        // uint8 currentVictimIncidentCount = victimIncidentCount[msg.sender];
-        
-        // victimIncidentCount[msg.sender] = uint8(
-        //     SafeMath.add(currentVictimIncidentCount, 1)
-        // );
+            ) ;
 
         // add molesterToVictim item
-
-            uint8 currentMolesterIncidentCount
+        uint8 currentMolesterIncidentCount
          = molesterIncidentCount[_transformedName];
         molesterToVictim[_transformedName][currentMolesterIncidentCount] = msg
             .sender;
@@ -108,14 +96,7 @@ contract SootRegistry {
             _longitude,
             _date
         );
-
-        // update counters
-        // incidents_size++;
     }
-
-    // function updateCidOfIncident(uint256 _id, bytes32 _cid) public {
-    //     incidents[_id].cid = _cid;
-    // }
 
     // ------------------------------------------------------------
     // View functions
@@ -157,36 +138,7 @@ contract SootRegistry {
         return victims;
     }
 
-    function getAllIncidents()
-        public
-        view
-        returns (
-            uint256[] memory ids,
-            bytes32[] memory names,
-            int256[] memory latitudes,
-            int256[] memory longitudes,
-            bool[] memory isEncrypteds
-        )
-    {
-        uint256 incidentCount = deployedToken.getCurrentTokenId() -1;
-        ids = new uint256[](incidentCount);
-        names = new bytes32[](incidentCount);
-        latitudes = new int256[](incidentCount);
-        longitudes = new int256[](incidentCount);
-        isEncrypteds = new bool[](incidentCount);
-
-        for (uint256 i = 0; i < incidentCount; i++) {
-            IncidentReport memory incident = incidents[i];
-            ids[i] = incident.id;
-            names[i] = incident.name;
-            latitudes[i] = incident.latitude;
-            longitudes[i] = incident.longitude;
-            isEncrypteds[i] = incident.isEncrypted;
-        }
-        return (ids, names, latitudes, longitudes, isEncrypteds);
-    }
-
-    function getIncident(uint256 incidentId)
+    function getIncident(uint256 tokenId)
         public
         view
         returns (
@@ -195,16 +147,21 @@ contract SootRegistry {
             int256 longitude,
             bool isEncrypted,
             uint256 date,
-            address author
+            address author,
+            string memory cid
         )
     {
+        IncidentReport memory item = tokenIdToIncident[tokenId];
+        string memory tokenURI = deployedToken.tokenURI(tokenId);
+
         return (
-            incidents[incidentId].name,
-            incidents[incidentId].latitude,
-            incidents[incidentId].longitude,
-            incidents[incidentId].isEncrypted,
-            incidents[incidentId].date,
-            incidents[incidentId].author
+            item.name,
+            item.latitude,
+            item.longitude,
+            item.isEncrypted,
+            item.date,
+            item.author,
+            tokenURI
         );
     }
 

@@ -1,6 +1,5 @@
 import React, { ReactElement } from 'react';
 import { useSoot } from '@contexts/Soot';
-import { useWeb3 } from '@contexts/Web3';
 import { List } from '@material-ui/core';
 import { IncidentListItem } from '@organisms/IncidentListItem/IncidentListItem';
 import { Async } from 'react-async';
@@ -8,11 +7,10 @@ import { Skeleton } from '@material-ui/lab';
 
 export const Incidents: React.FC = () => {
   const { sootRegistryFacade } = useSoot();
-  const { account } = useWeb3();
 
   return (
     <Async
-      promiseFn={(): Promise<string[]> => sootRegistryFacade.getAllIncidentIdsForVictim(account.address)}
+      promiseFn={(): Promise<string[]> => sootRegistryFacade.getAllIncidentIdsForVictim()}
       onReject={(error: Error): void => console.debug(error)}
     >
       <Async.Pending>

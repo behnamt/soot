@@ -4,9 +4,9 @@ import { Contract, EventData } from 'web3-eth-contract';
 import { AbiItem, hexToUtf8 } from 'web3-utils';
 import { IRepeatedEvent } from '@interfaces/Event.types';
 import { ILocation } from '@interfaces/IPosition';
-import { IFullIncident, IIncident, IIncidentEvent, IReport } from '@interfaces/ISoot.types';
+import { IFullIncident, IIncidentEvent, IReport } from '@interfaces/ISoot.types';
 import { saveDescription } from '@scripts/saveDescription';
-import { bytes32ToV0Cid, ipfsNode, v0CidToBytes32 } from '@services/IpfsService';
+import { ipfsNode } from '@services/IpfsService';
 import reportStorage from '@services/storage/ReportStorage';
 import SootRegistryJSON from '../../abi/SootRegistry.json';
 import { formatDate } from './../utils';
@@ -37,7 +37,7 @@ class SootRegistryFacade {
     return this.contract.methods
       .register(
         payload.name,
-        v0CidToBytes32(cid),
+        cid.toString(),
         payload.isEncrypted,
         (payload.latitude * GEO_RESOLUTION).toFixed(),
         (payload.longitude * GEO_RESOLUTION).toFixed(),
@@ -46,29 +46,6 @@ class SootRegistryFacade {
       .send({
         gas: 2500000,
       });
-  }
-
-  public async getAllIncidents(): Promise<IIncident[]> {
-    const transactionresult = await this.contract.methods.getAllIncidents().call();
-    const incidents: IIncident[] = [];
-
-    const ids = transactionresult.ids;
-    const names = transactionresult.names;
-    const latitudes = transactionresult.latitudes;
-    const longitudes = transactionresult.longitudes;
-    const isEncrypteds = transactionresult.isEncrypted;
-
-    ids.forEach((id: string, index: number) => {
-      incidents.push({
-        id,
-        name: hexToUtf8(names[index]),
-        latitude: Number(latitudes[index]) / GEO_RESOLUTION,
-        longitude: Number(longitudes[index]) / GEO_RESOLUTION,
-        isEncrypted: isEncrypteds[index],
-      });
-    });
-
-    return incidents;
   }
 
   public async getAllRegisterEvents(startPosition: ILocation, endPosition: ILocation): Promise<IIncidentEvent[]> {
@@ -86,7 +63,7 @@ class SootRegistryFacade {
           item.returnValues._longitude < Number((endPosition.longitude * GEO_RESOLUTION).toFixed()),
       )
       .map((item) => ({
-        cid: bytes32ToV0Cid(item.returnValues._cid).toString(),
+        cid: item.returnValues._cid,
         latitude: item.returnValues._latitude / GEO_RESOLUTION,
         longitude: item.returnValues._longitude / GEO_RESOLUTION,
         date: new Date(0).setUTCMilliseconds(item.returnValues._date).toString(),
@@ -96,14 +73,12 @@ class SootRegistryFacade {
       }));
   }
 
-  public getAllIncidentIdsForVictim(address: string): Promise<string[]> {
-    return this.contract.methods.getAllReportsOfVictim(address).call();
+  public async getAllIncidentIdsForVictim(): Promise<string[]> {
+    return this.contract.methods.getAllReports().call();
   }
 
-  public async getAllIncidentsForVictim(address: string): Promise<IFullIncident[]> {
-    console.debug(address);
-
-    const ids = await this.contract.methods.getAllReportsOfVictim(address).call();
+  public async getAllIncidentsForVictim(): Promise<IFullIncident[]> {
+    const ids = await this.contract.methods.getAllReports().call();
 
     return Promise.all(ids.map((id) => this.getIncident(id)));
   }
@@ -113,7 +88,7 @@ class SootRegistryFacade {
 
     return {
       ...incident,
-      cid: bytes32ToV0Cid(incident.cid).toString(),
+      cid: incident.cid,
       latitude: incident.latitude / GEO_RESOLUTION,
       longitude: incident.longitude / GEO_RESOLUTION,
       name: hexToUtf8(incident.name),

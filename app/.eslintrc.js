@@ -24,7 +24,7 @@ module.exports = {
     '@typescript-eslint/explicit-function-return-type': 'error',
     'import/extensions': 'off',
     'no-unused-vars': 'off',
-    'no-console': ['error', { allow: ['debug'] }],
+    'no-console': ['warn', { allow: ['debug'] }],
     curly: ['error', 'all'],
     'brace-style': ['error', '1tbs'],
     'padding-line-between-statements': [

@@ -71,18 +71,10 @@ setup: ##@setup Create dev environment
 	$(MAKE) ipfs-cors
 .PHONY: setup
 
-update: ##@update Update dev environment
-	$(MAKE) npm-install
-	$(MAKE) contracts-upgrade
-.PHONY: update
 
 contracts-deploy: ##@contracts Deploy current contract
 	./tools/deploy-contracts.sh
 .PHONY: contracts-deploy
-
-contracts-upgrade: ##@contracts Upgrade all contracts
-	./tools/upgrade-contracts.sh
-.PHONY: contracts-upgrade
 
 npm-prepare: ##@setup look for yarn and nvm
 	./tools/preconditions-check.sh
