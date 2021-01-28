@@ -30,7 +30,7 @@ const useEventsprovider = (): EventsContextInterface => {
   const { add } = useToast();
 
   const fetchMyReports = async (): Promise<void> => {
-    const myReports = await sootRegistryFacade.getAllIncidentsForVictim(account.address);
+    const myReports = await sootRegistryFacade.getAllIncidentsForVictim();
     const reportedNames = myReports.map((item) => item.name);
     setEvents(reportedNames);
   };

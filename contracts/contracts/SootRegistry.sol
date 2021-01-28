@@ -1,15 +1,13 @@
 // SPDX-License-Identifier: Unlicense
 pragma solidity ^0.6.0;
 
-import "@openzeppelin/contracts-ethereum-package/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts-ethereum-package/contracts/Initializable.sol";
-import "@openzeppelin/contracts-ethereum-package/contracts/math/SafeMath.sol";
+import "@openzeppelin/contracts/math/SafeMath.sol";
+import "./SootToken.sol";
 
-contract SootRegistry is Initializable, OwnableUpgradeSafe {
+contract SootRegistry {
     struct IncidentReport {
         uint256 id;
         bytes32 name;
-        bytes32 cid;
         bool isEncrypted;
         int256 latitude;
         int256 longitude;
@@ -17,33 +15,33 @@ contract SootRegistry is Initializable, OwnableUpgradeSafe {
         address author;
     }
 
+    event Register(
+        uint256 id,
+        address _from,
+        bytes32 _name,
+        string _cid,
+        bool _isEncrypted,
+        int256 _latitude,
+        int256 _longitude,
+        uint256 _date
+    );
+
     // victim > incident
-    mapping(address => mapping(uint8 => uint256)) victimToIncidentId;
-    mapping(address => uint8) victimIncidentCount;
+    mapping(address => mapping(uint256 => uint256)) victimToTokenId;
 
     // molester > victim
     mapping(bytes32 => mapping(uint8 => address)) molesterToVictim;
     mapping(bytes32 => uint8) molesterIncidentCount;
 
     // all incidents
-    IncidentReport[] incidents;
-    uint256 incidents_size;
+    mapping(uint256 => IncidentReport) tokenIdToIncident;
+    SootToken deployedToken;
 
-    function initialize() public initializer {
-        __Ownable_init();
-        incidents_size = 0;
+    constructor(address _tokenDeployedAddress) public {
+        deployedToken = SootToken(
+            _tokenDeployedAddress
+        );
     }
-
-    event Register(
-        uint256 id,
-        address _from,
-        bytes32 _name,
-        bytes32 _cid,
-        bool _isEncrypted,
-        int256 _latitude,
-        int256 _longitude,
-        uint256 _date
-    );
 
     event RepeatedAttack(bytes32 indexed _name, address indexed _author, uint256 _date);
 
@@ -52,7 +50,7 @@ contract SootRegistry is Initializable, OwnableUpgradeSafe {
     // ------------------------------------------------------------
     function register(
         string memory _name,
-        bytes32 _cid,
+        string memory _cid,
         bool _isEncrypted,
         int256 _latitude,
         int256 _longitude,
@@ -60,31 +58,22 @@ contract SootRegistry is Initializable, OwnableUpgradeSafe {
     ) public {
         bytes32 _transformedName = _stringToBytes32(_name);
 
+        uint tokenId = deployedToken.getCurrentTokenId();
+        victimToTokenId[msg.sender][getTokenCount()] = tokenId;
+        deployedToken.mintToken(msg.sender, tokenId, _cid);
         // add to incidents store
-        incidents.push(
-            IncidentReport(
-                incidents_size,
+        tokenIdToIncident[tokenId]=IncidentReport(
+                tokenId,
                 _transformedName,
-                _cid,
                 _isEncrypted,
                 _latitude,
                 _longitude,
                 _date,
                 msg.sender
-            )
-        );
-
-        // add victimToIncidentId item
-        uint8 currentVictimIncidentCount = victimIncidentCount[msg.sender];
-        victimToIncidentId[msg
-            .sender][currentVictimIncidentCount] = incidents_size;
-        victimIncidentCount[msg.sender] = uint8(
-            SafeMath.add(currentVictimIncidentCount, 1)
-        );
+            ) ;
 
         // add molesterToVictim item
-
-            uint8 currentMolesterIncidentCount
+        uint8 currentMolesterIncidentCount
          = molesterIncidentCount[_transformedName];
         molesterToVictim[_transformedName][currentMolesterIncidentCount] = msg
             .sender;
@@ -98,7 +87,7 @@ contract SootRegistry is Initializable, OwnableUpgradeSafe {
         }
 
         emit Register(
-            incidents_size,
+            tokenId,
             msg.sender,
             _transformedName,
             _cid,
@@ -107,32 +96,24 @@ contract SootRegistry is Initializable, OwnableUpgradeSafe {
             _longitude,
             _date
         );
-
-        // update counters
-        incidents_size++;
-    }
-
-    function updateCidOfIncident(uint256 _id, bytes32 _cid) public {
-        incidents[_id].cid = _cid;
     }
 
     // ------------------------------------------------------------
     // View functions
     // ------------------------------------------------------------
-    function getAllReportsOfVictim(address _victim)
+    function getAllReports()
         public
         view
         returns (
             uint256[] memory ids
         )
     {
-        uint8 currentVictimIncidentCount = victimIncidentCount[_victim];
+        uint256 currentVictimIncidentCount = getTokenCount();
 
         ids = new uint256[](currentVictimIncidentCount);
 
-        for (uint8 i = 0; i < currentVictimIncidentCount; i++) {
-            uint256 currentIncidentId = victimToIncidentId[_victim][i];
-
+        for (uint256 i = 0; i < currentVictimIncidentCount; i++) {
+            uint256 currentIncidentId = victimToTokenId[msg.sender][i];
             ids[i] = currentIncidentId;
         }
         return (ids);
@@ -157,56 +138,35 @@ contract SootRegistry is Initializable, OwnableUpgradeSafe {
         return victims;
     }
 
-    function getAllIncidents()
-        public
-        view
-        returns (
-            uint256[] memory ids,
-            bytes32[] memory names,
-            int256[] memory latitudes,
-            int256[] memory longitudes,
-            bool[] memory isEncrypteds
-        )
-    {
-        ids = new uint256[](incidents_size);
-        names = new bytes32[](incidents_size);
-        latitudes = new int256[](incidents_size);
-        longitudes = new int256[](incidents_size);
-        isEncrypteds = new bool[](incidents_size);
-
-        for (uint256 i = 0; i < incidents_size; i++) {
-            IncidentReport memory incident = incidents[i];
-            ids[i] = incident.id;
-            names[i] = incident.name;
-            latitudes[i] = incident.latitude;
-            longitudes[i] = incident.longitude;
-            isEncrypteds[i] = incident.isEncrypted;
-        }
-        return (ids, names, latitudes, longitudes, isEncrypteds);
-    }
-
-    function getIncident(uint256 id)
+    function getIncident(uint256 tokenId)
         public
         view
         returns (
             bytes32 name,
             int256 latitude,
             int256 longitude,
-            bytes32 cid,
             bool isEncrypted,
             uint256 date,
-            address author
+            address author,
+            string memory cid
         )
     {
+        IncidentReport memory item = tokenIdToIncident[tokenId];
+        string memory tokenURI = deployedToken.tokenURI(tokenId);
+
         return (
-            incidents[id].name,
-            incidents[id].latitude,
-            incidents[id].longitude,
-            incidents[id].cid,
-            incidents[id].isEncrypted,
-            incidents[id].date,
-            incidents[id].author
+            item.name,
+            item.latitude,
+            item.longitude,
+            item.isEncrypted,
+            item.date,
+            item.author,
+            tokenURI
         );
+    }
+
+    function getTokenCount() public view returns (uint) {
+        return deployedToken.balanceOf(msg.sender);
     }
 
     // ------------------------------------------------------------
