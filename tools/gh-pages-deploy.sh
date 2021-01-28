@@ -18,7 +18,8 @@ mv ../app/.env.tmp ../app/.env.production
 
 
 npx oz compile
-contract_address=`NODE_ENV=production npx oz deploy --no-interactive --kind upgradable --network goerli SootRegistry`
+soot_token_contract_address=`npx oz deploy --no-interactive --network goerli --kind regular SootToken`
+contract_address=`NODE_ENV=production npx oz deploy --no-interactive --kind regular --network goerli SootRegistry $soot_token_contract_address`
 npx oz send-tx -n development --method initialize --to "$contract_address"
 
 sed -e "s/^\(REACT_APP_SOOT_REGISTRY_CONTRACT_ADDRESS=\s*\).*\$/\1$contract_address/" ../app/.env.production > ../app/.env.tmp
