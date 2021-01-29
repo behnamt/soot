@@ -49,11 +49,11 @@ help: ##@other show this help.
 	@perl -e '$(HELP_FUN)' $(MAKEFILE_LIST)
 
 app/.env.local: ##@development create .env file (if not present)
-	cp $(CURDIR)/app/.env $(CURDIR)/app/.env.local
+	cp $(CURDIR)/packages/app/.env $(CURDIR)/packages/app/.env.local
 	@perl -e 'print "\n${GREEN_BG} ${NOTICE_ENV_FILE}${RESET}\n\n";'
 
 contracts/.env.local: ##@development create .env file (if not present)
-	cp $(CURDIR)/contracts/.env $(CURDIR)/contracts/.env.local
+	cp $(CURDIR)/packages/contracts/.env $(CURDIR)/packages/contracts/.env.local
 	@perl -e 'print "\n${GREEN_BG} ${NOTICE_ENV_FILE}${RESET}\n\n";'
 
 env: ##@setup Create local env file
@@ -62,12 +62,12 @@ env: ##@setup Create local env file
 .PHONY: env
 
 setup: ##@setup Create dev environment
-	git config core.hooksPath .githooks
 	$(MAKE) env
 	$(MAKE) npm-prepare
 	$(MAKE) npm-install
 	$(MAKE) start
 	$(MAKE) contracts-deploy
+	$(MAKE) build-core
 	$(MAKE) ipfs-cors
 .PHONY: setup
 
@@ -75,6 +75,10 @@ setup: ##@setup Create dev environment
 contracts-deploy: ##@contracts Deploy current contract
 	./tools/deploy-contracts.sh
 .PHONY: contracts-deploy
+
+build-core: ##@core build core
+	./tools/build-core.sh
+.PHONY: build-core
 
 npm-prepare: ##@setup look for yarn and nvm
 	./tools/preconditions-check.sh
@@ -85,8 +89,9 @@ npm-install: ##@setup installs node-dependencies
 .PHONY: npm-install
 
 npm-cleanup: ##@cleanup remove all node_modules
-	rm -rf ./contracts/node_modules
-	rm -rf ./app/node_modules
+	rm -rf ./packages/contracts/node_modules
+	rm -rf ./packages/core/node_modules
+	rm -rf ./packages/app/node_modules
 .PHONY: npm-cleanup
 
 start: ##@development start containers

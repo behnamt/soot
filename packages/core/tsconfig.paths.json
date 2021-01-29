@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@interfaces/*": ["./@types/*"],
+      "@services/*": ["./services/*"],
+      "@scripts/*": ["./scripts/*"]
+    }
+  }
+}

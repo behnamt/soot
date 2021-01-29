@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-cd contracts
+cd packages/contracts
 npx oz remove SootToken
 npx oz remove SootRegistry
 npx oz compile

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-cd contracts
+cd packages/contracts
 
 infura_key=`cat .env.local | grep INFURA_KEY= | cut -d '=' -f2`
 mnemonic=`cat .env.local | grep MNEMONIC= | cut -d '=' -f2`
