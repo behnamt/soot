@@ -1,25 +1,27 @@
 import { ILocation } from './IPosition';
 
 export interface IFullIncident extends ILocation {
-  name: string;
+  author: string;
   cid: string;
   date: string;
   isEncrypted: boolean;
-  author: string;
+  name: string;
 }
 
 export interface IIncidentEvent extends ILocation {
-  id: string;
-  name: string;
   cid: string;
   date: string;
-  isEncrypted: boolean;
-}
-
-export interface IIncident extends ILocation {
   id: string;
-  name: string;
   isEncrypted: boolean;
+  name: string;
+}
+export interface IDBIncident extends ILocation {
+  id: string;
+  date: number;
+  author: string;
+  description: string;
+  latitude: number;
+  longitude: number;
 }
 
 export interface IReport extends ILocation {

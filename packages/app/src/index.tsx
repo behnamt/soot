@@ -11,6 +11,7 @@ import { EventsProvider } from '@contexts/Event';
 import { ToastProvider } from '@contexts/Toast';
 import Container from '@material-ui/core/Container';
 import { ContextAwareApp } from './components/ContextAwarApp';
+import { OrbitDBProvider } from '@contexts/OrbitDB';
 
 const StyledContainer = styled(Container)`
   background-color: white;
@@ -26,11 +27,13 @@ ReactDOM.render(
         <Web3Provider>
           <SootProvider>
             <IpfsProvider>
-              <EventsProvider>
-                <ContextAwareApp>
-                  <App />
-                </ContextAwareApp>
-              </EventsProvider>
+              <OrbitDBProvider>
+                <EventsProvider>
+                  <ContextAwareApp>
+                    <App />
+                  </ContextAwareApp>
+                </EventsProvider>
+              </OrbitDBProvider>
             </IpfsProvider>
           </SootProvider>
         </Web3Provider>

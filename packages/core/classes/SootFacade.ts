@@ -10,6 +10,7 @@ import { ipfsNode } from '@services/IpfsService';
 import reportStorage from '@services/storage/ReportStorage';
 import SootRegistryJSON from '@soot/contracts/build/contracts/SootRegistry.json';
 import { formatDate } from '../utils';
+import { DBInstance } from '../services/orbitDB';
 
 const GEO_RESOLUTION = 1000000;
 
@@ -34,8 +35,24 @@ class SootRegistryFacade {
   public async report(payload: IReport, account: Account, getPublickey: () => Promise<string>): Promise<void> {
     const cid = await saveDescription(account, ipfsNode, payload.description, payload.isEncrypted, getPublickey);
 
+    const tokenId = await this.contract.methods.getNextTokenId().call();
+
+    if (!DBInstance) {
+      throw 'Orbit db is not initialized';
+    }
+
+    DBInstance.put({
+      id: tokenId,
+      author: account.address,
+      description: payload.description,
+      latitude: Number((payload.latitude * GEO_RESOLUTION).toFixed()),
+      longitude: Number((payload.longitude * GEO_RESOLUTION).toFixed()),
+      date: Date.now(),
+    });
+
     return this.contract.methods
       .register(
+        tokenId,
         payload.name,
         cid.toString(),
         payload.isEncrypted,

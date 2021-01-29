@@ -49,6 +49,7 @@ contract SootRegistry {
     // Core public functions
     // ------------------------------------------------------------
     function register(
+        uint256 tokenId,
         string memory _name,
         string memory _cid,
         bool _isEncrypted,
@@ -58,7 +59,6 @@ contract SootRegistry {
     ) public {
         bytes32 _transformedName = _stringToBytes32(_name);
 
-        uint tokenId = deployedToken.getCurrentTokenId();
         victimToTokenId[msg.sender][getTokenCount()] = tokenId;
         deployedToken.mintToken(msg.sender, tokenId, _cid);
         // add to incidents store
@@ -101,6 +101,10 @@ contract SootRegistry {
     // ------------------------------------------------------------
     // View functions
     // ------------------------------------------------------------
+    function getNextTokenId() public view returns (uint256) {
+        return deployedToken.getCurrentTokenId();
+    }
+
     function getAllReports()
         public
         view
