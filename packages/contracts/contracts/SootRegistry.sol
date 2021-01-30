@@ -50,21 +50,19 @@ contract SootRegistry {
     // ------------------------------------------------------------
     function register(
         uint256 tokenId,
-        string memory _name,
+        bytes32 _name,
         string memory _cid,
         bool _isEncrypted,
         int256 _latitude,
         int256 _longitude,
         uint256 _date
     ) public {
-        bytes32 _transformedName = _stringToBytes32(_name);
-
         victimToTokenId[msg.sender][getTokenCount()] = tokenId;
         deployedToken.mintToken(msg.sender, tokenId, _cid);
         // add to incidents store
         tokenIdToIncident[tokenId]=IncidentReport(
                 tokenId,
-                _transformedName,
+                _name,
                 _isEncrypted,
                 _latitude,
                 _longitude,
@@ -74,22 +72,22 @@ contract SootRegistry {
 
         // add molesterToVictim item
         uint8 currentMolesterIncidentCount
-         = molesterIncidentCount[_transformedName];
-        molesterToVictim[_transformedName][currentMolesterIncidentCount] = msg
+         = molesterIncidentCount[_name];
+        molesterToVictim[_name][currentMolesterIncidentCount] = msg
             .sender;
         uint8 newMolesterCount = uint8(
             SafeMath.add(currentMolesterIncidentCount, 1)
         );
-        molesterIncidentCount[_transformedName] = newMolesterCount;
+        molesterIncidentCount[_name] = newMolesterCount;
 
         if (newMolesterCount > 2) {
-            emit RepeatedAttack(_transformedName, msg.sender, _date);
+            emit RepeatedAttack(_name, msg.sender, _date);
         }
 
         emit Register(
             tokenId,
             msg.sender,
-            _transformedName,
+            _name,
             _cid,
             _isEncrypted,
             _latitude,
@@ -123,20 +121,17 @@ contract SootRegistry {
         return (ids);
     }
 
-    function getAllVictimsOnMolester(string memory _name)
+    function getAllVictimsOnMolester(bytes32 _name)
         public
         view
         returns (address[] memory victims)
     {
-        bytes32 _transformedName = _stringToBytes32(_name);
-
-
-            uint8 currentMolesterIncidentCount
-         = molesterIncidentCount[_transformedName];
+        uint8 currentMolesterIncidentCount
+         = molesterIncidentCount[_name];
         victims = new address[](currentMolesterIncidentCount);
 
         for (uint8 i = 0; i < currentMolesterIncidentCount; i++) {
-            victims[i] = molesterToVictim[_transformedName][i];
+            victims[i] = molesterToVictim[_name][i];
         }
 
         return victims;

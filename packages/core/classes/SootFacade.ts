@@ -1,10 +1,10 @@
 import Web3 from 'web3';
 import { Account } from 'web3-core';
 import { Contract, EventData } from 'web3-eth-contract';
-import { AbiItem, hexToUtf8 } from 'web3-utils';
+import { AbiItem, hexToUtf8, sha3 } from 'web3-utils';
 import { IRepeatedEvent } from '@interfaces/Event.types';
 import { ILocation } from '@interfaces/IPosition';
-import { IFullIncident, IIncidentEvent, IReport } from '@interfaces/ISoot.types';
+import { IDBIncident, IFullIncident, IIncidentEvent, IReport } from '@interfaces/ISoot.types';
 import { saveDescription } from '@scripts/saveDescription';
 import { ipfsNode } from '@services/IpfsService';
 import reportStorage from '@services/storage/ReportStorage';
@@ -41,8 +41,11 @@ class SootRegistryFacade {
       throw 'Orbit db is not initialized';
     }
 
+    const name = sha3(payload.name) || '';
+
     DBInstance.put({
       id: tokenId,
+      name,
       author: account.address,
       description: payload.description,
       latitude: Number((payload.latitude * GEO_RESOLUTION).toFixed()),
@@ -53,7 +56,7 @@ class SootRegistryFacade {
     return this.contract.methods
       .register(
         tokenId,
-        payload.name,
+        name,
         cid.toString(),
         payload.isEncrypted,
         (payload.latitude * GEO_RESOLUTION).toFixed(),

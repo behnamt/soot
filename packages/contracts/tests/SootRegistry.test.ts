@@ -1,5 +1,6 @@
 const { accounts, contract, } = require('@openzeppelin/test-environment');
 const { expectRevert, expectEvent, BN } = require('@openzeppelin/test-helpers');
+const { sha3 } = require('web3-utils');
 const sootToken = contract.fromArtifact('SootToken');
 const sootRegistry = contract.fromArtifact('SootRegistry');
 
@@ -23,7 +24,7 @@ describe('PropertyRegistry Contract', () => {
 
       const receipt = await sootRegistryInstance.register(
         tokenId,
-        "a",
+        sha3("a"),
         "some cid",
         false,
         123,
@@ -36,7 +37,7 @@ describe('PropertyRegistry Contract', () => {
       expectEvent(receipt, 'Register', {
         id: "1",
         _from: Alex,
-        _name: "0x6100000000000000000000000000000000000000000000000000000000000000",
+        _name: sha3('a'),
         _cid: "some cid",
         _isEncrypted: false,
         _latitude: new BN(123),
@@ -50,13 +51,13 @@ describe('PropertyRegistry Contract', () => {
       expect(idsBefore.length).toEqual(0);
       // first
       const firstTokenId = await sootRegistryInstance.getNextTokenId();
-      await sootRegistryInstance.register(firstTokenId, "some name", "some cid", false, 123, 456, 789, { from: Alex });
+      await sootRegistryInstance.register(firstTokenId, sha3("some name"), "some cid", false, 123, 456, 789, { from: Alex });
       // second
       const secondTokenId = await sootRegistryInstance.getNextTokenId();
-      await sootRegistryInstance.register(secondTokenId, "a", "some other cid", false, 1230, 4560, 7890, { from: Bob });
+      await sootRegistryInstance.register(secondTokenId, sha3("some other name"), "some other cid", false, 1230, 4560, 7890, { from: Bob });
       // third
       const thirdTokenId = await sootRegistryInstance.getNextTokenId();
-      await sootRegistryInstance.register(thirdTokenId, "a", "some other cid", false, 1230, 4560, 7890, { from: Alex });
+      await sootRegistryInstance.register(thirdTokenId, sha3("another one"), "some other cid", false, 1230, 4560, 7890, { from: Alex });
 
       const idsAfter = await sootRegistryInstance.getAllReports({ from: Alex });
       expect(idsAfter.length).toEqual(2);
@@ -67,7 +68,7 @@ describe('PropertyRegistry Contract', () => {
       const tokenId = await sootRegistryInstance.getNextTokenId();
       await sootRegistryInstance.register(
         tokenId,
-        "a",
+        sha3("a"),
         "some cid",
         false,
         123,
