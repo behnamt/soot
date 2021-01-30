@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Alert, AlertTitle } from '@material-ui/lab';
-import { useAsync } from 'react-async';
+import { AsyncState, useAsync } from 'react-async';
 import { IIncidentEvent } from '@soot/core/dist/@types/ISoot.types';
 import { ILocation } from '@soot/core/dist/@types/IPosition';
 import { BingMap } from '@molecules/BingMap/BingMap';
@@ -11,21 +11,22 @@ import { IMark } from '@interfaces/IMap';
 const VIRTUAL_EARTH_API = 'http://dev.virtualearth.net/REST/v1/Locations';
 
 export const Locations: React.FC = () => {
-  const [incidents, setIncidents] = useState<IIncidentEvent[] | undefined>([]);
   const [startPosition, setStartPosition] = useState<ILocation | null>(null);
   const [endPosition, setEndPosition] = useState<ILocation | null>(null);
 
   const { sootRegistryFacade } = useSoot();
   const { position, error } = usePosition();
 
-  useEffect((): void => {
-    (async (): Promise<void> => {
-      if (startPosition && endPosition) {
-        const list = await sootRegistryFacade?.getAllRegisterEvents(startPosition, endPosition);
+  const { data: incidents, run: getIncidents }: AsyncState<IIncidentEvent[]> = useAsync({
+    initialValue: [],
+    deferFn: () => sootRegistryFacade?.getAllRegisterEvents(startPosition, endPosition),
+    onReject: (error: Error) => console.debug(error),
+  });
 
-        setIncidents(list);
-      }
-    })();
+  useEffect((): void => {
+    if (startPosition && endPosition) {
+      getIncidents();
+    }
   }, [startPosition, endPosition]);
 
   useAsync({
