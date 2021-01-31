@@ -6,7 +6,7 @@ export interface IToast {
 }
 
 export interface IToastContext {
-  add: (content: string) => void;
+  add: (content: string, autoHide?: boolean, type?: EToastTypes) => void;
   remove: (id: string) => void;
   toasts: IToast[];
 }

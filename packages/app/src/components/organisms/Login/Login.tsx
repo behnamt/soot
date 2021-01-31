@@ -21,7 +21,7 @@ const getWallet = async (web3Instance): Promise<KeyValueWalletService> => {
 
 export const Login: React.FC = () => {
   const [localWallet, setLocalWallet] = useState<KeyValueWalletService>();
-  const { web3Instance, isMetaMask, connect } = useWeb3();
+  const { web3Instance, isBrowserWallet, connect } = useWeb3();
 
   useAsync({
     promiseFn: useCallback(() => getWallet(web3Instance), []),
@@ -35,7 +35,7 @@ export const Login: React.FC = () => {
   return (
     <Box display="flex" flexDirection="column">
       <LoginHeader />
-      {isMetaMask ? (
+      {isBrowserWallet ? (
         <Box p={3} display="flex" justifyContent="center" flexDirection="column">
           <Typography variant="subtitle1">Seems like you have a built in wallet</Typography>
           <Button variant="contained" color="primary" title="Import" onClick={connectToWallet}>

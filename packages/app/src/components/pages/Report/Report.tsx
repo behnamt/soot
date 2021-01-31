@@ -39,7 +39,7 @@ const harassmentTypes = [
 
 export const Report: React.FC = () => {
   const { sootRegistryFacade } = useSoot();
-  const { account, getPublicKey } = useWeb3();
+  const { account, encryptionPublicKey } = useWeb3();
   const { addReportEvent } = useEvents();
   const { add } = useToast();
 
@@ -64,7 +64,7 @@ export const Report: React.FC = () => {
           longitude: reportPosition?.longitude,
         },
         account,
-        getPublicKey,
+        encryptionPublicKey,
       );
       addReportEvent(name);
       setName('');

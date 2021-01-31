@@ -32,8 +32,8 @@ class SootRegistryFacade {
     });
   }
 
-  public async report(payload: IReport, account: Account, getPublickey: () => Promise<string>): Promise<void> {
-    const cid = await saveDescription(account, ipfsNode, payload.description, payload.isEncrypted, getPublickey);
+  public async report(payload: IReport, account: Account, encryptionPublicKey: string): Promise<void> {
+    const cid = await saveDescription(ipfsNode, payload.description, payload.isEncrypted, encryptionPublicKey);
 
     const tokenId = await this.contract.methods.getNextTokenId().call();
 
