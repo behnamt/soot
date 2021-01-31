@@ -22,6 +22,7 @@ export interface IDBIncident extends ILocation {
   description: string;
   latitude: number;
   longitude: number;
+  name: string;
 }
 
 export interface IReport extends ILocation {

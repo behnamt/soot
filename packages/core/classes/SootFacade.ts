@@ -1,7 +1,7 @@
 import Web3 from 'web3';
 import { Account } from 'web3-core';
 import { Contract, EventData } from 'web3-eth-contract';
-import { AbiItem, hexToUtf8, sha3 } from 'web3-utils';
+import { AbiItem, sha3 } from 'web3-utils';
 import { IRepeatedEvent } from '@interfaces/Event.types';
 import { ILocation } from '@interfaces/IPosition';
 import { IDBIncident, IFullIncident, IIncidentEvent, IReport } from '@interfaces/ISoot.types';
@@ -9,10 +9,10 @@ import { saveDescription } from '@scripts/saveDescription';
 import { ipfsNode } from '@services/IpfsService';
 import reportStorage from '@services/storage/ReportStorage';
 import SootRegistryJSON from '@soot/contracts/build/contracts/SootRegistry.json';
-import { formatDate } from '../utils';
+import { decreaseLocationResolution, formatDate, increaseLocationResolution } from '../utils';
 import { DBInstance } from '../services/orbitDB';
 
-const GEO_RESOLUTION = 1000000;
+export const GEO_RESOLUTION = 1000000;
 
 class SootRegistryFacade {
   public contract!: Contract;
@@ -48,10 +48,22 @@ class SootRegistryFacade {
       name,
       author: account.address,
       description: payload.description,
-      latitude: Number((payload.latitude * GEO_RESOLUTION).toFixed()),
-      longitude: Number((payload.longitude * GEO_RESOLUTION).toFixed()),
+      latitude: increaseLocationResolution(payload.latitude),
+      longitude: increaseLocationResolution(payload.longitude),
       date: Date.now(),
     });
+
+    const estimateGas = await this.contract.methods
+    .register(
+      tokenId,
+      name,
+      cid.toString(),
+      payload.isEncrypted,
+      increaseLocationResolution(payload.latitude),
+      increaseLocationResolution(payload.longitude),
+      Date.now(),
+    )
+    .estimateGas({ gas: 2500000});
 
     return this.contract.methods
       .register(
@@ -59,12 +71,12 @@ class SootRegistryFacade {
         name,
         cid.toString(),
         payload.isEncrypted,
-        (payload.latitude * GEO_RESOLUTION).toFixed(),
-        (payload.longitude * GEO_RESOLUTION).toFixed(),
+        increaseLocationResolution(payload.latitude),
+        increaseLocationResolution(payload.longitude),
         Date.now(),
       )
       .send({
-        gas: 2500000,
+        gas: estimateGas + 1,
       });
   }
 
@@ -77,19 +89,19 @@ class SootRegistryFacade {
     return allRegisteredEvents
       .filter(
         (item: EventData) =>
-          item.returnValues._latitude > Number((startPosition.latitude * GEO_RESOLUTION).toFixed()) &&
-          item.returnValues._latitude < Number((endPosition.latitude * GEO_RESOLUTION).toFixed()) &&
-          item.returnValues._longitude > Number((startPosition.longitude * GEO_RESOLUTION).toFixed()) &&
-          item.returnValues._longitude < Number((endPosition.longitude * GEO_RESOLUTION).toFixed()),
+          item.returnValues._latitude > increaseLocationResolution(startPosition.latitude) &&
+          item.returnValues._latitude < increaseLocationResolution(endPosition.latitude) &&
+          item.returnValues._longitude > increaseLocationResolution(startPosition.longitude) &&
+          item.returnValues._longitude < increaseLocationResolution(endPosition.longitude),
       )
       .map((item) => ({
         cid: item.returnValues._cid,
-        latitude: item.returnValues._latitude / GEO_RESOLUTION,
-        longitude: item.returnValues._longitude / GEO_RESOLUTION,
+        latitude: decreaseLocationResolution(item.returnValues._latitude),
+        longitude: decreaseLocationResolution(item.returnValues._longitude),
         date: new Date(0).setUTCMilliseconds(item.returnValues._date).toString(),
         id: item.returnValues.id,
         isEncrypted: item.returnValues.isEncrypted,
-        name: hexToUtf8(item.returnValues._name),
+        name: item.returnValues._name,
       }));
   }
 
@@ -109,9 +121,9 @@ class SootRegistryFacade {
     return {
       ...incident,
       cid: incident.cid,
-      latitude: incident.latitude / GEO_RESOLUTION,
-      longitude: incident.longitude / GEO_RESOLUTION,
-      name: hexToUtf8(incident.name),
+      latitude: decreaseLocationResolution(incident.latitude),
+      longitude: decreaseLocationResolution(incident.longitude),
+      name: incident.name,
       date: formatDate(Number(incident.date)),
     };
   }
@@ -127,7 +139,7 @@ class SootRegistryFacade {
         .map(
           (event: EventData): IRepeatedEvent => ({
             author: event.returnValues._author,
-            name: hexToUtf8(event.returnValues._name),
+            name: event.returnValues._name,
             date: formatDate(event.returnValues._date),
           }),
         )

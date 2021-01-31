@@ -1,3 +1,5 @@
+import { GEO_RESOLUTION } from "classes/SootFacade";
+
 export const formatDate = (date: number): string => {
   const d = new Date(0);
   d.setUTCMilliseconds(date);
@@ -17,3 +19,11 @@ export const formatDate = (date: number): string => {
 
   return [year, month, day].join('-') + ' ' + hours + ':' + minutes;
 };
+
+
+export const increaseLocationResolution = (value: number): number => {
+  return Number((value * GEO_RESOLUTION).toFixed());
+}
+export const decreaseLocationResolution = (value: number): number => {
+  return value / GEO_RESOLUTION;
+}
