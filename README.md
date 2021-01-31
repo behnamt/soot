@@ -31,13 +31,20 @@ Look through the frontend [README](app/README.md)
 #### TODO
 1. [] move all fetch apis to constants
 1. [x] ~~use react-async to call api and remove async useEffects~~ :(
-1. [x] implement token-based incidents
-1. [x] implement contract-tests for tocken-bases
+1. [x] ~~implement token-based incidents~~
+1. [x] ~~implement contract-tests for tocken-bases~~
 1. [] refactor messenger component to use orbitDB
 1. [] investigate on how to validate participants in a chat room using blockchain status
-1. [] fix encryption of an incident with client's key
+1. [x] ~~fix encryption of an incident with client's key~~ >> works on chrome but not on brave
 1. [] post an incident with a custom location on map
 1. [] update node to v.14
-1. [] move core outside of src directory
-1. [] encrypt harasser's name to stop mobing
-1. [x] use lerna and make monorepo
+1. [x] ~~move core outside of src directory~~
+1. [x] ~~encrypt harasser's name to stop mobing~~
+1. [x] ~~use lerna and make monorepo~~
+1. [] use `notistack` to show toast messages
+1. [] remove duplicated data from sootRegistery.sol: location data, date, cid
+1. [] use encryption to store harasser name in orbitDB
+1. [] decrypt harasser's name in my reports using metamask's `eth_decrypt`
+1. [] fix bug to show the same harasser message only once
+1. [] implement wallet connect
+1. [] remove local wallet and related forms, types and scripts 
