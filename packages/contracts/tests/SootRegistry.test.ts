@@ -26,10 +26,7 @@ describe('PropertyRegistry Contract', () => {
         tokenId,
         sha3("a"),
         "some cid",
-        false,
-        123,
-        456,
-        789, { from: Alex }
+        false, { from: Alex }
       );
       const countAfter = await sootRegistryInstance.getTokenCount({ from: Alex });
       expect(Number(countAfter)).toStrictEqual(1);
@@ -38,11 +35,7 @@ describe('PropertyRegistry Contract', () => {
         id: "1",
         _from: Alex,
         _name: sha3('a'),
-        _cid: "some cid",
-        _isEncrypted: false,
-        _latitude: new BN(123),
-        _longitude: new BN(456),
-        _date: new BN(789)
+        _cid: "some cid"
       });
     });
 
@@ -51,13 +44,13 @@ describe('PropertyRegistry Contract', () => {
       expect(idsBefore.length).toEqual(0);
       // first
       const firstTokenId = await sootRegistryInstance.getNextTokenId();
-      await sootRegistryInstance.register(firstTokenId, sha3("some name"), "some cid", false, 123, 456, 789, { from: Alex });
+      await sootRegistryInstance.register(firstTokenId, sha3("some name"), "some cid", false, { from: Alex });
       // second
       const secondTokenId = await sootRegistryInstance.getNextTokenId();
-      await sootRegistryInstance.register(secondTokenId, sha3("some other name"), "some other cid", false, 1230, 4560, 7890, { from: Bob });
+      await sootRegistryInstance.register(secondTokenId, sha3("some other name"), "some other cid", false, { from: Bob });
       // third
       const thirdTokenId = await sootRegistryInstance.getNextTokenId();
-      await sootRegistryInstance.register(thirdTokenId, sha3("another one"), "some other cid", false, 1230, 4560, 7890, { from: Alex });
+      await sootRegistryInstance.register(thirdTokenId, sha3("another one"), "some other cid", false, { from: Alex });
 
       const idsAfter = await sootRegistryInstance.getAllReports({ from: Alex });
       expect(idsAfter.length).toEqual(2);
@@ -70,14 +63,10 @@ describe('PropertyRegistry Contract', () => {
         tokenId,
         sha3("a"),
         "some cid",
-        false,
-        123,
-        456,
-        789, { from: Alex }
+        false, { from: Alex }
       );
       const incident = await sootRegistryInstance.getIncident(1, { from: Alex });
 
-      expect(incident.author).toBe(Alex);
       expect(incident.cid).toBe("some cid");
     });
   });

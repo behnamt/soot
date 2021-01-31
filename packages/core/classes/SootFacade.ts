@@ -4,9 +4,7 @@ import { Contract, EventData } from 'web3-eth-contract';
 import { AbiItem, sha3 } from 'web3-utils';
 import { IRepeatedEvent } from '@interfaces/Event.types';
 import { ILocation } from '@interfaces/IPosition';
-import { IDBIncident, IFullIncident, IIncidentEvent, IReport } from '@interfaces/ISoot.types';
-import { saveDescription } from '@scripts/saveDescription';
-import { ipfsNode } from '@services/IpfsService';
+import { IDBIncident, IFormattedDBIncident, IFullIncident, IReport } from '@interfaces/ISoot.types';
 import reportStorage from '@services/storage/ReportStorage';
 import SootRegistryJSON from '@soot/contracts/build/contracts/SootRegistry.json';
 import { decreaseLocationResolution, formatDate, increaseLocationResolution } from '../utils';
@@ -33,8 +31,6 @@ class SootRegistryFacade {
   }
 
   public async report(payload: IReport, account: Account, encryptionPublicKey: string): Promise<void> {
-    const cid = await saveDescription(ipfsNode, payload.description, payload.isEncrypted, encryptionPublicKey);
-
     const tokenId = await this.contract.methods.getNextTokenId().call();
 
     if (!DBInstance) {
@@ -43,65 +39,54 @@ class SootRegistryFacade {
 
     const name = sha3(payload.name) || '';
 
-    DBInstance.put({
+    const hash = await DBInstance.put({
       id: tokenId,
       name,
       author: account.address,
       description: payload.description,
-      latitude: increaseLocationResolution(payload.latitude),
-      longitude: increaseLocationResolution(payload.longitude),
+      latitude: payload.latitude,
+      longitude: payload.longitude,
       date: Date.now(),
     });
 
     const estimateGas = await this.contract.methods
-    .register(
-      tokenId,
-      name,
-      cid.toString(),
-      payload.isEncrypted,
-      increaseLocationResolution(payload.latitude),
-      increaseLocationResolution(payload.longitude),
-      Date.now(),
-    )
-    .estimateGas({ gas: 2500000});
+      .register(
+        tokenId,
+        name,
+        hash,
+        payload.isEncrypted,
+      )
+      .estimateGas({ gas: 2500000 });
 
     return this.contract.methods
       .register(
         tokenId,
         name,
-        cid.toString(),
+        hash,
         payload.isEncrypted,
-        increaseLocationResolution(payload.latitude),
-        increaseLocationResolution(payload.longitude),
-        Date.now(),
       )
       .send({
         gas: estimateGas + 1,
       });
   }
 
-  public async getAllRegisterEvents(startPosition: ILocation, endPosition: ILocation): Promise<IIncidentEvent[]> {
-    const allRegisteredEvents = await this.contract.getPastEvents('Register', {
-      fromBlock: 0,
-      toBlock: 'latest',
-    });
+  public async getAllRegisterEvents(startPosition: ILocation, endPosition: ILocation): Promise<IFormattedDBIncident[]> {
+    if (!DBInstance) {
+      throw 'Orbit db is not initialized';
+    }
+
+    const allRegisteredEvents = await DBInstance.query((
+      doc => doc.latitude > startPosition.latitude &&
+        doc.latitude < endPosition.latitude &&
+        doc.longitude > startPosition.longitude &&
+        doc.longitude < endPosition.longitude));
 
     return allRegisteredEvents
-      .filter(
-        (item: EventData) =>
-          item.returnValues._latitude > increaseLocationResolution(startPosition.latitude) &&
-          item.returnValues._latitude < increaseLocationResolution(endPosition.latitude) &&
-          item.returnValues._longitude > increaseLocationResolution(startPosition.longitude) &&
-          item.returnValues._longitude < increaseLocationResolution(endPosition.longitude),
-      )
       .map((item) => ({
-        cid: item.returnValues._cid,
-        latitude: decreaseLocationResolution(item.returnValues._latitude),
-        longitude: decreaseLocationResolution(item.returnValues._longitude),
-        date: new Date(0).setUTCMilliseconds(item.returnValues._date).toString(),
-        id: item.returnValues.id,
-        isEncrypted: item.returnValues.isEncrypted,
-        name: item.returnValues._name,
+        ...item,
+        latitude: item.latitude,
+        longitude: item.longitude,
+        date: new Date(0).setUTCMilliseconds(item.date).toString(),
       }));
   }
 
@@ -109,23 +94,31 @@ class SootRegistryFacade {
     return this.contract.methods.getAllReports().call();
   }
 
-  public async getAllIncidentsForVictim(): Promise<IFullIncident[]> {
-    const ids: number[] = await this.contract.methods.getAllReports().call();
+  public async getAllIncidentsForVictim(): Promise<IDBIncident[]> {
+    const ids: string[] = await this.contract.methods.getAllReports().call();
 
-    return Promise.all(ids.map((id: number) => this.getIncident(id)));
+    if (!DBInstance) {
+      throw 'Orbit db is not initialized';
+    }
+
+    return DBInstance.query((doc) => ids.includes(doc.id))
   }
 
-  public async getIncident(id: number): Promise<IFullIncident> {
-    const incident: IFullIncident = await this.contract.methods.getIncident(id).call();
+  public async getIncident(id: number): Promise<IFormattedDBIncident | null> {
+    if (!DBInstance) {
+      throw 'Orbit db is not initialized';
+    }
 
-    return {
-      ...incident,
-      cid: incident.cid,
-      latitude: decreaseLocationResolution(incident.latitude),
-      longitude: decreaseLocationResolution(incident.longitude),
-      name: incident.name,
-      date: formatDate(Number(incident.date)),
-    };
+    const incident = await DBInstance.get(id);
+    if (incident?.length) {
+      return {
+        ...incident[0],
+        latitude: incident[0].latitude,
+        longitude: incident[0].longitude,
+        date: formatDate(Number(incident[0].date)),
+      };
+    }
+    return null;
   }
 
   public async getAllRepeatedEvents(): Promise<IRepeatedEvent[]> {
@@ -140,7 +133,6 @@ class SootRegistryFacade {
           (event: EventData): IRepeatedEvent => ({
             author: event.returnValues._author,
             name: event.returnValues._name,
-            date: formatDate(event.returnValues._date),
           }),
         )
         .filter((event: IRepeatedEvent) => !this.isTheAuthor(event.author) && this.hasAHistoryEvent(event.name)),
