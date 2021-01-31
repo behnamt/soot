@@ -37,6 +37,7 @@ const useWeb3Provider = (): IWeb3Context => {
   useEffect((): void => {
     if (window.ethereum) {
       const web3: Web3 = new Web3(ethereum);
+      window.ethereum.enable();
       setIsMetaMask(true);
       setWeb3Instance(web3);
       window.ethereum.on('accountsChanged', handleAccountsChanged);
