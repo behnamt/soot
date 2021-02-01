@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {
   Box,
   TextField,
-  Button,
   Checkbox,
   FormControlLabel,
   FormControl,
@@ -17,6 +16,9 @@ import { useWeb3 } from '@contexts/Web3';
 import { useEvents } from '@contexts/Event';
 import { BingMap } from '@molecules/BingMap/BingMap';
 import { ILocation } from '@soot/core/dist/@types/IPosition';
+import { LoadingButton } from '@molecules/LoadingButton/LoadingButton';
+import { useAsync } from 'react-async';
+import { EToastTypes } from '@interfaces/IToast.types';
 
 const harassmentTypes = [
   {
@@ -52,9 +54,8 @@ export const Report: React.FC = () => {
   const [isCurrentLocation, setIsCurrentLocation] = useState<boolean>(true);
   const [customPosition, setCustomPosition] = useState<ILocation>(null);
 
-  const submit = async (): Promise<void> => {
-    const reportPosition = isCurrentLocation ? position : customPosition;
-    if (reportPosition) {
+  const { run: storeReport, isPending } = useAsync({
+    deferFn: async ([reportPosition]) =>
       sootRegistryFacade.report(
         {
           name,
@@ -65,10 +66,19 @@ export const Report: React.FC = () => {
         },
         account,
         encryptionPublicKey,
-      );
+      ),
+    onResolve: () => {
       addReportEvent(name);
       setName('');
       setDescription('');
+      add('Report added sucessfully', true, EToastTypes.SUCCESS);
+    },
+  });
+
+  const submit = async (): Promise<void> => {
+    const reportPosition = isCurrentLocation ? position : customPosition;
+    if (reportPosition) {
+      storeReport(reportPosition);
     } else {
       add('Please select a location on map or enable your location sharing');
     }
@@ -166,9 +176,16 @@ export const Report: React.FC = () => {
           </Box>
         ) : null}
         <Box mb={2} display="flex" width={1}>
-          <Button variant="contained" color="primary" title="Report" onClick={submit}>
+          <LoadingButton
+            variant="contained"
+            color="primary"
+            title="Report"
+            disabled={isPending}
+            loading={isPending}
+            onClick={submit}
+          >
             Save the report
-          </Button>
+          </LoadingButton>
         </Box>
       </Box>
     </form>
