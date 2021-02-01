@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import { AsyncState, useAsync } from 'react-async';
-import { IIncidentEvent } from '@soot/core/dist/@types/ISoot.types';
+import { IFormattedDBIncident } from '@soot/core/dist/@types/ISoot.types';
 import { ILocation } from '@soot/core/dist/@types/IPosition';
 import { BingMap } from '@molecules/BingMap/BingMap';
 import { useSoot } from '@contexts/Soot';
@@ -17,7 +17,7 @@ export const Locations: React.FC = () => {
   const { sootRegistryFacade } = useSoot();
   const { position, error } = usePosition();
 
-  const { data: incidents, run: getIncidents }: AsyncState<IIncidentEvent[]> = useAsync({
+  const { data: incidents, run: getIncidents }: AsyncState<IFormattedDBIncident[]> = useAsync({
     initialValue: [],
     deferFn: () => sootRegistryFacade?.getAllRegisterEvents(startPosition, endPosition),
     onReject: (error: Error) => console.debug(error),

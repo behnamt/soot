@@ -9,21 +9,13 @@ contract SootRegistry {
         uint256 id;
         bytes32 name;
         bool isEncrypted;
-        int256 latitude;
-        int256 longitude;
-        uint256 date;
-        address author;
     }
 
     event Register(
         uint256 id,
         address _from,
         bytes32 _name,
-        string _cid,
-        bool _isEncrypted,
-        int256 _latitude,
-        int256 _longitude,
-        uint256 _date
+        string _cid
     );
 
     // victim > incident
@@ -43,7 +35,7 @@ contract SootRegistry {
         );
     }
 
-    event RepeatedAttack(bytes32 indexed _name, address indexed _author, uint256 _date);
+    event RepeatedAttack(bytes32 indexed _name, address indexed _author);
 
     // ------------------------------------------------------------
     // Core public functions
@@ -52,10 +44,7 @@ contract SootRegistry {
         uint256 tokenId,
         bytes32 _name,
         string memory _cid,
-        bool _isEncrypted,
-        int256 _latitude,
-        int256 _longitude,
-        uint256 _date
+        bool _isEncrypted
     ) public {
         victimToTokenId[msg.sender][getTokenCount()] = tokenId;
         deployedToken.mintToken(msg.sender, tokenId, _cid);
@@ -63,11 +52,7 @@ contract SootRegistry {
         tokenIdToIncident[tokenId]=IncidentReport(
                 tokenId,
                 _name,
-                _isEncrypted,
-                _latitude,
-                _longitude,
-                _date,
-                msg.sender
+                _isEncrypted
             ) ;
 
         // add molesterToVictim item
@@ -81,18 +66,14 @@ contract SootRegistry {
         molesterIncidentCount[_name] = newMolesterCount;
 
         if (newMolesterCount > 2) {
-            emit RepeatedAttack(_name, msg.sender, _date);
+            emit RepeatedAttack(_name, msg.sender);
         }
 
         emit Register(
             tokenId,
             msg.sender,
             _name,
-            _cid,
-            _isEncrypted,
-            _latitude,
-            _longitude,
-            _date
+            _cid
         );
     }
 
@@ -142,11 +123,7 @@ contract SootRegistry {
         view
         returns (
             bytes32 name,
-            int256 latitude,
-            int256 longitude,
             bool isEncrypted,
-            uint256 date,
-            address author,
             string memory cid
         )
     {
@@ -155,11 +132,7 @@ contract SootRegistry {
 
         return (
             item.name,
-            item.latitude,
-            item.longitude,
             item.isEncrypted,
-            item.date,
-            item.author,
             tokenURI
         );
     }

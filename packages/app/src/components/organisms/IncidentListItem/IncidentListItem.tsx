@@ -2,7 +2,7 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { ListItem, ListItemText } from '@material-ui/core';
 import { Async } from 'react-async';
-import { IFullIncident } from '@soot/core/dist/@types/ISoot.types';
+import { IFormattedDBIncident } from '@soot/core/dist/@types/ISoot.types';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { useSoot } from '@contexts/Soot';
 
@@ -14,7 +14,7 @@ export const IncidentListItem: React.FC<{ id: number }> = (props: { id: number }
 
   return (
     <Async
-      promiseFn={(): Promise<IFullIncident> => sootRegistryFacade.getIncident(id)}
+      promiseFn={(): Promise<IFormattedDBIncident> => sootRegistryFacade.getIncident(id)}
       onReject={(error: Error): void => console.debug(error)}
     >
       <Async.Pending>
@@ -24,7 +24,7 @@ export const IncidentListItem: React.FC<{ id: number }> = (props: { id: number }
         </React.Fragment>{' '}
       </Async.Pending>
       <Async.Fulfilled>
-        {(incident: IFullIncident): React.ReactNode => (
+        {(incident: IFormattedDBIncident): React.ReactNode => (
           <ListItem>
             <ListItemText
               primary={incident.name}

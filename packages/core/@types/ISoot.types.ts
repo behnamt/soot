@@ -8,13 +8,6 @@ export interface IFullIncident extends ILocation {
   name: string;
 }
 
-export interface IIncidentEvent extends ILocation {
-  cid: string;
-  date: string;
-  id: string;
-  isEncrypted: boolean;
-  name: string;
-}
 export interface IDBIncident extends ILocation {
   id: string;
   date: number;
@@ -23,6 +16,10 @@ export interface IDBIncident extends ILocation {
   latitude: number;
   longitude: number;
   name: string;
+}
+
+export interface IFormattedDBIncident extends Omit<IDBIncident, "date"> {
+  date: string;
 }
 
 export interface IReport extends ILocation {
