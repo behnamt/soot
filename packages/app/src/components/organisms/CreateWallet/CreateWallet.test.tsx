@@ -2,7 +2,7 @@ import React from 'react';
 import { CreateWallet } from './CreateWallet';
 import { shallow } from 'enzyme';
 
-it('Create', () => {
+it('should find the button', () => {
   const wrapper = shallow(<CreateWallet />);
 
   expect(wrapper.find('button')).toBeTruthy();

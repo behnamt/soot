@@ -76,7 +76,16 @@ module.exports = {
   // ],
 
   // A map from regular expressions to module names that allow to stub out resources with a single module
-  moduleNameMapper: {},
+  moduleNameMapper: {
+    '^@contexts/(.*)$': '<rootDir>/src/context/$1',
+    '^@interfaces/(.*)$': '<rootDir>/src/@types/$1',
+    '^@atoms/(.*)$': '<rootDir>/src/components/atoms/$1',
+    '^@molecules/(.*)$': '<rootDir>/src/components/molecules/$1',
+    '^@organisms/(.*)$': '<rootDir>/src/components/organisms/$1',
+    '^@pages/(.*)$': '<rootDir>/src/components/pages/$1',
+    '^@hooks/(.*)$': '<rootDir>/src/hooks/$1',
+    '^@lib/(.*)$': '<rootDir>/src/lib/$1',
+  },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
   // modulePathIgnorePatterns: [],
