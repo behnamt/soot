@@ -1,11 +1,11 @@
 import React from 'react';
-import { FilledInput, Box } from '@material-ui/core';
-import Skeleton from '@material-ui/lab/Skeleton';
-import { IFormattedDBIncident } from '@soot/core/dist/@types/ISoot.types';
-import { useParams } from 'react-router-dom';
-import { useSoot } from '@contexts/Soot';
-import { BingMap } from '@molecules/BingMap/BingMap';
 import { Async } from 'react-async';
+import { useParams } from 'react-router-dom';
+import { Box, FilledInput } from '@material-ui/core';
+import Skeleton from '@material-ui/lab/Skeleton';
+import { useSoot } from '@contexts/Soot';
+import { IFormattedDBIncident } from '@soot/core/dist/@types/ISoot.types';
+import { BingMap } from '../../BingMap';
 
 export const IncidentDetail: React.FC = () => {
   const { incidentId } = useParams<{ incidentId: string }>();

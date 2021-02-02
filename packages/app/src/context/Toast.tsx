@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useState } from 'react';
 import { IToast, IToastContext, EToastTypes } from '@interfaces/IToast.types';
-import { Toast } from '../components/atoms/Toast/Toast';
+import { Toast } from '../components/Toast';
 
 const ToastContext = React.createContext<IToastContext>({
   add: () => null,

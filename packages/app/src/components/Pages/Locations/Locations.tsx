@@ -3,7 +3,7 @@ import { Alert, AlertTitle } from '@material-ui/lab';
 import { AsyncState, useAsync } from 'react-async';
 import { IFormattedDBIncident } from '@soot/core/dist/@types/ISoot.types';
 import { ILocation } from '@soot/core/dist/@types/IPosition';
-import { BingMap } from '@molecules/BingMap/BingMap';
+import { BingMap } from '../../BingMap';
 import { useSoot } from '@contexts/Soot';
 import { usePosition } from '@hooks/usePosition';
 import { IMark } from '@interfaces/IMap';

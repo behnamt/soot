@@ -2,14 +2,14 @@ import React from 'react';
 import { Box } from '@material-ui/core';
 import styled from 'styled-components';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { BottomBar } from '@molecules/BottomBar/BottomBar';
-import { MenuBar } from '@molecules/MenuBar/MenuBar';
+import { BottomBar } from '../BottomBar/BottomBar';
+import { MenuBar } from '../MenuBar/MenuBar';
 import { Incidents } from '@pages/Incidents/Incidents';
 import { Locations } from '@pages/Locations/Locations';
 import { Messenger } from '@pages/Messenger/Messenger';
 import { Chat } from '@pages/Chat/Chat';
 import { Report } from '@pages/Report/Report';
-import { IncidentDetail } from '../IncidentDetail/IncidentDetail';
+import { IncidentDetail } from '@pages/IncidentDetail/IncidentDetail';
 
 const StyledBox = styled(Box)`
   height: 80vh;

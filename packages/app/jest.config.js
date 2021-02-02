@@ -79,10 +79,7 @@ module.exports = {
   moduleNameMapper: {
     '^@contexts/(.*)$': '<rootDir>/src/context/$1',
     '^@interfaces/(.*)$': '<rootDir>/src/@types/$1',
-    '^@atoms/(.*)$': '<rootDir>/src/components/atoms/$1',
-    '^@molecules/(.*)$': '<rootDir>/src/components/molecules/$1',
-    '^@organisms/(.*)$': '<rootDir>/src/components/organisms/$1',
-    '^@pages/(.*)$': '<rootDir>/src/components/pages/$1',
+    '^@pages/(.*)$': '<rootDir>/src/components/Pages/$1',
     '^@hooks/(.*)$': '<rootDir>/src/hooks/$1',
     '^@lib/(.*)$': '<rootDir>/src/lib/$1',
   },

@@ -4,10 +4,7 @@
     "paths": {
       "@contexts/*": ["./src/context/*"],
       "@interfaces/*": ["./src/@types/*"],
-      "@atoms/*": ["./src/components/atoms/*"],
-      "@molecules/*": ["./src/components/molecules/*"],
-      "@organisms/*": ["./src/components/organisms/*"],
-      "@pages/*": ["./src/components/pages/*"],
+      "@pages/*": ["./src/components/Pages/*"],
       "@hooks/*": ["./src/hooks/*"],
       "@lib/*": ["./src/lib/*"]
     }

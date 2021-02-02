@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useAsync } from 'react-async';
 import {
   Box,
   TextField,
@@ -9,16 +10,15 @@ import {
   MenuItem,
   Select,
 } from '@material-ui/core';
+import { ILocation } from '@soot/core/dist/@types/IPosition';
+import { useEvents } from '@contexts/Event';
 import { useSoot } from '@contexts/Soot';
 import { useToast } from '@contexts/Toast';
-import { usePosition } from '@hooks/usePosition';
 import { useWeb3 } from '@contexts/Web3';
-import { useEvents } from '@contexts/Event';
-import { BingMap } from '@molecules/BingMap/BingMap';
-import { ILocation } from '@soot/core/dist/@types/IPosition';
-import { LoadingButton } from '@molecules/LoadingButton/LoadingButton';
-import { useAsync } from 'react-async';
+import { usePosition } from '@hooks/usePosition';
 import { EToastTypes } from '@interfaces/IToast.types';
+import { BingMap } from '../../BingMap';
+import { LoadingButton } from '../../LoadingButton';
 
 const harassmentTypes = [
   {

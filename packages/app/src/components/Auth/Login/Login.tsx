@@ -4,9 +4,9 @@ import { Box, Button, Typography } from '@material-ui/core';
 import { useWeb3 } from '@contexts/Web3';
 import KeyValueWalletService from '@soot/core/dist/services/KeyValueWalletService';
 import storage from '@soot/core/dist/services/storage/AppStorage.service';
-import { LoginHeader } from '@atoms/LoginHeader/LoginHeader';
+import { LoginHeader } from '../LoginHeader/LoginHeader';
 import { CreateWallet } from '../CreateWallet/CreateWallet';
-import { UnlockWallet } from '@molecules/UnlockWallet/UnlockWallet';
+import { UnlockWallet } from '../UnlockWallet/UnlockWallet';
 
 const getWallet = async (web3Instance): Promise<KeyValueWalletService> => {
   try {

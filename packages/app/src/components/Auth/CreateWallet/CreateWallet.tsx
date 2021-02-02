@@ -5,8 +5,8 @@ import createWallet from '@soot/core/dist/scripts/createWallet';
 import createWalletFromPrivateKey from '@soot/core/dist/scripts/createWalletFromPrivateKey';
 import KeyValueWalletService from '@soot/core/dist/services/KeyValueWalletService';
 import storage from '@soot/core/dist/services/storage/AppStorage.service';
-import { CreateWalletForm } from '@molecules/CreateWalletForm/CreateWalletForm';
-import { ImportWalletForm } from '@molecules/ImportWalletForm/ImportWalletForm';
+import { CreateWalletForm } from '../CreateWalletForm/CreateWalletForm';
+import { ImportWalletForm } from '../ImportWalletForm/ImportWalletForm';
 
 export const CreateWallet: React.FC = () => {
   const [password, setPassword] = useState('');
