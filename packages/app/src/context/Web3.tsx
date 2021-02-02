@@ -12,6 +12,7 @@ declare let ethereum: any;
 
 const web3Context = React.createContext<IWeb3Context>({
   isBrowserWallet: false,
+  isPending: false,
   web3Instance: null,
   account: null,
   connect: () => null,
@@ -25,6 +26,7 @@ const useWeb3Provider = (): IWeb3Context => {
   const [web3Instance, setWeb3Instance] = useState<Web3 | null>(null);
   const [account, setAccount] = useState<Account | null>(null);
   const [isBrowserWallet, setIsBrowserWallet] = useState<boolean>(false);
+  const [isPending, setIsPending] = useState<boolean>(false);
   const [encryptionPublicKey, setEncryptionPublicKey] = useState<string>('');
 
   const { add } = useToast();
@@ -76,9 +78,11 @@ const useWeb3Provider = (): IWeb3Context => {
   const connect = async (_account: Account | string): Promise<void> => {
     if (isBrowserWallet) {
       try {
+        setIsPending(true);
         const account = await getBrowserWalletAccount();
         setBrowserWalletPublicKey(account[0]);
         handleAccountsChanged(account);
+        setIsPending(false);
       } catch (error) {
         console.debug(error);
       }
@@ -107,6 +111,7 @@ const useWeb3Provider = (): IWeb3Context => {
 
   return {
     isBrowserWallet,
+    isPending,
     web3Instance,
     account,
     connect,

@@ -1,12 +1,13 @@
 import React, { useCallback, useState } from 'react';
 import { useAsync } from 'react-async';
-import { Box, Button, Typography } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 import { useWeb3 } from '@contexts/Web3';
 import KeyValueWalletService from '@soot/core/dist/services/KeyValueWalletService';
 import storage from '@soot/core/dist/services/storage/AppStorage.service';
 import { LoginHeader } from '../LoginHeader/LoginHeader';
 import { CreateWallet } from '../CreateWallet/CreateWallet';
 import { UnlockWallet } from '../UnlockWallet/UnlockWallet';
+import { LoadingButton } from '../../LoadingButton';
 
 const getWallet = async (web3Instance): Promise<KeyValueWalletService> => {
   try {
@@ -21,7 +22,7 @@ const getWallet = async (web3Instance): Promise<KeyValueWalletService> => {
 
 export const Login: React.FC = () => {
   const [localWallet, setLocalWallet] = useState<KeyValueWalletService>();
-  const { web3Instance, isBrowserWallet, connect } = useWeb3();
+  const { web3Instance, isBrowserWallet, connect, isPending } = useWeb3();
 
   useAsync({
     promiseFn: useCallback(() => getWallet(web3Instance), []),
@@ -36,11 +37,20 @@ export const Login: React.FC = () => {
     <Box display="flex" flexDirection="column">
       <LoginHeader />
       {isBrowserWallet ? (
-        <Box p={3} display="flex" justifyContent="center" flexDirection="column">
+        <Box display="flex">
           <Typography variant="subtitle1">Seems like you have a built in wallet</Typography>
-          <Button variant="contained" color="primary" title="Import" onClick={connectToWallet}>
-            Connect with Wallet
-          </Button>
+          <Box>
+            <LoadingButton
+              disabled={isPending}
+              loading={isPending}
+              variant="contained"
+              color="primary"
+              title="Import"
+              onClick={connectToWallet}
+            >
+              Connect with Wallet
+            </LoadingButton>
+          </Box>
         </Box>
       ) : localWallet ? (
         <UnlockWallet />
